@@ -4,7 +4,7 @@ from config import db, bcrypt
 
 
 # needs: password stuffs, orphan logic adjust on comments
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -17,16 +17,19 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    trips = db.relationship("TripUser", back_populates="user")
-    admin_trips = db.relationship(
-        "Trip", secondary="trip_user", back_populates="admins"
+    trips = db.relationship(
+        "TripUser", back_populates="user", overlaps="admin_trips,admins", viewonly=True
     )
-    tasks = db.relationship("TaskUser", back_populates="user")
+    admin_trips = db.relationship(
+        "Trip", secondary="trip_users", back_populates="admins", overlaps="trips"
+    )
+    tasks = db.relationship("UserTask", back_populates="user")
 
     posts = db.relationship("Post", back_populates="user")
     comments = db.relationship("Comment", back_populates="user")
     post_likes = db.relationship("PostLike", back_populates="user")
     comment_likes = db.relationship("CommentLike", back_populates="user")
+    travel_legs = db.relationship("TravelLeg", back_populates="user")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
@@ -38,25 +41,27 @@ class Trip(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(db.String)
-    start_date = db.Column(db.DateTime)
+    name = db.Column(db.String, nullable=False)
+    start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime)
-    location = db.Column(db.String)
+    location = db.Column(db.String, nullable=False)
     lodging = db.Column(db.String)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    users = db.relationship("TripUser", back_populates="trip")
+    users = db.relationship(
+        "TripUser", back_populates="trip", overlaps="admin_trips", viewonly=True
+    )
     admins = db.relationship(
-        "User", secondary="trip_user", back_populates="admin_trips"
+        "User", secondary="trip_users", back_populates="admin_trips", overlaps="trips"
     )
 
-    travels_legs = db.relationship("TravelLeg", back_populates="trip")
-    events = db.relationship("Events", back_populates="trip")
+    travel_legs = db.relationship("TravelLeg", back_populates="trip")
+    events = db.relationship("Event", back_populates="trip")
     posts = db.relationship("Post", back_populates="trip")
-    tasks = db.relationship("TaskTrip", back_populates="trip")
-    items = db.relationship("ItemTrip", back_populates="trip")
+    tasks = db.relationship("TripTask", back_populates="trip")
+    # items = db.relationship("ItemTrip", back_populates="trip")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
@@ -64,7 +69,7 @@ class Trip(db.Model):
 
 # needs: everything
 class TripUser(db.Model):
-    __tablename__ = "trips_users"
+    __tablename__ = "trip_users"
 
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
@@ -74,8 +79,12 @@ class TripUser(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    user = db.relationship("User", back_populates="trips")
-    trip = db.relationship("Trip", back_populates="users")
+    user = db.relationship(
+        "User", back_populates="trips", overlaps="admin_trips,admins"
+    )
+    trip = db.relationship(
+        "Trip", back_populates="users", overlaps="admin_trips,admins"
+    )
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
@@ -87,8 +96,8 @@ class TripTask(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
-    name = db.Column(db.String)
-    note = db.Column(db.String)
+    title = db.Column(db.String, nullable=False)
+    note = db.Column(db.String, nullable=False)
     link = db.Column(db.String)
     cost = db.Column(db.Float)
     optional = db.Column(db.Boolean, default=True)
@@ -98,9 +107,8 @@ class TripTask(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    child_tasks = db.relationship(
-        "UserTask", back_populates="parent_task", nullable=True
-    )
+    child_tasks = db.relationship("UserTask", back_populates="parent_task")
+    trip = db.relationship("Trip", back_populates="tasks")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
@@ -112,9 +120,10 @@ class UserTask(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
-    parent_task_id = db.Column(db.Integer, db.ForeignKey("tasks"), nullable=True)
-    name = db.Column(db.String)
-    note = db.Column(db.String)
+    parent_task_id = db.Column(db.Integer, db.ForeignKey("trip_tasks.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    title = db.Column(db.String, nullable=False)
+    note = db.Column(db.String, nullable=False)
     link = db.Column(db.String)
     cost = db.Column(db.Float)
     optional = db.Column(db.Boolean, default=True)
@@ -122,9 +131,8 @@ class UserTask(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    parent_task = db.relationship(
-        "TripTask", back_populates="child_tasks", nullable=True
-    )
+    parent_task = db.relationship("TripTask", back_populates="child_tasks")
+    user = db.relationship("User", back_populates="tasks")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
@@ -132,12 +140,12 @@ class UserTask(db.Model):
 
 # needs: everything
 class Post(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    content = db.Column(db.String)
+    content = db.Column(db.String, nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -153,19 +161,19 @@ class Post(db.Model):
 
 # needs: everything
 class Comment(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    content = db.Column(db.String)
+    content = db.Column(db.String, nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     post = db.relationship("Post", back_populates="comments")
     user = db.relationship("User", back_populates="comments")
-    comment_likes = db.relationship("PostLike", back_populates="comment")
+    comment_likes = db.relationship("CommentLike", back_populates="comment")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
@@ -173,7 +181,7 @@ class Comment(db.Model):
 
 # needs: everything
 class PostLike(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "post_likes"
 
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
@@ -191,7 +199,7 @@ class PostLike(db.Model):
 
 # needs: everything
 class CommentLike(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "comment_likes"
 
     id = db.Column(db.Integer, primary_key=True)
     comment_id = db.Column(db.Integer, db.ForeignKey("comments.id"))
@@ -200,7 +208,7 @@ class CommentLike(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    comment = db.relationship("Post", back_populates="comment_likes")
+    comment = db.relationship("Comment", back_populates="comment_likes")
     user = db.relationship("User", back_populates="comment_likes")
 
     def __repr__(self):
@@ -209,12 +217,12 @@ class CommentLike(db.Model):
 
 # needs: everything
 class Event(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "events"
 
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
-    name = db.Column(db.String)
-    start_time = db.Column(db.DateTime)
+    title = db.Column(db.String, nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime)
     link = db.Column(db.String)
     ticketed = db.Column(db.Boolean, default=False)
@@ -224,52 +232,29 @@ class Event(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
+    trip = db.relationship("Trip", back_populates="events")
+
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
 
 
 # needs: everything
 class TravelLeg(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "travel_legs"
 
     id = db.Column(db.Integer, primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    travel_type = db.Column(db.String)
+    departure_time = db.Column(db.DateTime, nullable=False)
+    arrival_time = db.Column(db.DateTime, nullable=False)
+    flight_number = db.Column(db.String)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-    # # needs: everything
-    # class ItemTrip(db.Model):
-    #     __tablename__ = "users"
-
-    #     id = db.Column(db.Integer, primary_key=True)
-
-    #     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    #     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
-    #     def __repr__(self):
-    #         return f"{self.__tablename__} id:{self.id}"
-
-    # # needs: everything
-    # class ItemUser(db.Model):
-    #     __tablename__ = "users"
-
-    #     id = db.Column(db.Integer, primary_key=True)
-
-    #     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    #     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
-    #     def __repr__(self):
-    #         return f"{self.__tablename__} id:{self.id}"
-
-    __tablename__ = "users"
-
-    id = db.Column(db.Integer, primary_key=True)
-
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    trip = db.relationship("Trip", back_populates="travel_legs")
+    user = db.relationship("User", back_populates="travel_legs")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
