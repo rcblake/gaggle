@@ -1,10 +1,18 @@
 from sqlalchemy_serializer import SerializerMixin
+from config import (
+    db,
+    bcrypt,
+    Schema,
+    fields,
+    ValidationError,
+    SQLAlchemySchema,
+    SQLAlchemyAutoSchema,
+    validates,
+)
+from marshmallow_sqlalchemy.fields import Nested
 
-from config import db, bcrypt
 
-
-# needs: password stuffs, orphan logic adjust on comments
-class User(db.Model, SerializerMixin):
+class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -17,11 +25,9 @@ class User(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    trips = db.relationship(
-        "TripUser", back_populates="user", overlaps="admin_trips,admins", viewonly=True
-    )
+    trips = db.relationship("TripUser", back_populates="user")
     admin_trips = db.relationship(
-        "Trip", secondary="trip_users", back_populates="admins", overlaps="trips"
+        "Trip", secondary="trip_users", back_populates="admins"
     )
     tasks = db.relationship("UserTask", back_populates="user")
 
@@ -35,7 +41,19 @@ class User(db.Model, SerializerMixin):
         return f"{self.__tablename__} id:{self.id}"
 
 
-# needs: everything
+class UserSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+        include_relationships = True
+        
+    name = fields.String(required=True)
+    email = fields.Email(required=True)
+    password = fields.
+
+    trips = Nested("TripUserSchema", many=True, exclude=("user",))
+    admin_trips = Nested("TripSchema", many=True, exclude=("admins",))
+
+
 class Trip(db.Model):
     __tablename__ = "trips"
 
@@ -50,24 +68,29 @@ class Trip(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    users = db.relationship(
-        "TripUser", back_populates="trip", overlaps="admin_trips", viewonly=True
-    )
+    users = db.relationship("TripUser", back_populates="trip")
     admins = db.relationship(
-        "User", secondary="trip_users", back_populates="admin_trips", overlaps="trips"
+        "User", secondary="trip_users", back_populates="admin_trips"
     )
 
     travel_legs = db.relationship("TravelLeg", back_populates="trip")
     events = db.relationship("Event", back_populates="trip")
     posts = db.relationship("Post", back_populates="trip")
     tasks = db.relationship("TripTask", back_populates="trip")
-    # items = db.relationship("ItemTrip", back_populates="trip")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
 
 
-# needs: everything
+class TripSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Trip
+        include_relationships = True
+
+    users = Nested("TripUserSchema", many=True, exclude=("trip",))
+    admins = Nested("UserSchema", many=True, exclude=("admin_trips",))
+
+
 class TripUser(db.Model):
     __tablename__ = "trip_users"
 
@@ -79,15 +102,20 @@ class TripUser(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    user = db.relationship(
-        "User", back_populates="trips", overlaps="admin_trips,admins"
-    )
-    trip = db.relationship(
-        "Trip", back_populates="users", overlaps="admin_trips,admins"
-    )
+    user = db.relationship("User", back_populates="trips")
+    trip = db.relationship("Trip", back_populates="users")
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
+
+
+class TripUserSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = TripUser
+        include_relationships = True
+
+    user = Nested("UserSchema", exclude=("trips",))
+    trip = Nested("TripSchema", exclude=("user",))
 
 
 # needs: owner currently commented out, nullables, repr
