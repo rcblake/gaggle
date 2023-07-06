@@ -7,9 +7,10 @@ from config import (
     ValidationError,
     SQLAlchemySchema,
     SQLAlchemyAutoSchema,
-    validates,
+    validate,
 )
 from marshmallow_sqlalchemy.fields import Nested
+from datetime import date
 
 
 class User(db.Model):
@@ -17,10 +18,10 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    profile_pic = db.Column(db.String)
+    _password_hash = db.Column(db.String, nullable=False)
+    profile_pic = db.Column(db.String, nullable=True)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -45,13 +46,21 @@ class UserSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = User
         include_relationships = True
-        
-    name = fields.String(required=True)
-    email = fields.Email(required=True)
-    password = fields.
 
-    trips = Nested("TripUserSchema", many=True, exclude=("user",))
+    name = fields.String(
+        required=True,
+        validate=validate.length(max=20, error="Name must be less than 20 characters"),
+    )
+    email = fields.Email(required=True, error="invalid email address")
+
     admin_trips = Nested("TripSchema", many=True, exclude=("admins",))
+
+    tasks = Nested("TaskSchema", many=True, exclude=("user"))
+    posts = Nested("PostSchema", many=True, exclude=("user"))
+    comments = Nested("CommentSchema", many=True, exclude=("user"))
+    post_likes = Nested("PostLikeSchema", many=True, exclude=("user"))
+    comment_likes = Nested("TripUserSchema", many=True, exclude=("user",))
+    travel_legs = Nested("TripUserSchema", many=True, exclude=("user",))
 
 
 class Trip(db.Model):
@@ -63,7 +72,6 @@ class Trip(db.Model):
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime)
     location = db.Column(db.String, nullable=False)
-    lodging = db.Column(db.String)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -73,6 +81,7 @@ class Trip(db.Model):
         "User", secondary="trip_users", back_populates="admin_trips"
     )
 
+    lodging = db.relationship("Lodging", back_populates="trip")
     travel_legs = db.relationship("TravelLeg", back_populates="trip")
     events = db.relationship("Event", back_populates="trip")
     posts = db.relationship("Post", back_populates="trip")
@@ -87,7 +96,34 @@ class TripSchema(SQLAlchemyAutoSchema):
         model = Trip
         include_relationships = True
 
+    name = fields.String(
+        required=True,
+        validate=validate.length(max=20, error="Name must be less than 20 characters"),
+    )
+    start_date = fields.Date(
+        required=True,
+        validate=validate.range(
+            min=date.today(), error="Start date must be in the future"
+        ),
+    )
+    end_date = fields.Date(
+        required=True,
+        validate=validate.range(
+            min=date.today(), error="End date must be in the future"
+        ),
+    )
+    location = fields.String(
+        validate=validate.Length(
+            max=50, error="Location must be less than 50 characters"
+        )
+    )
+
+    lodging = Nested("LodgingSchema", exclude=("trip",))
     users = Nested("TripUserSchema", many=True, exclude=("trip",))
+    travel_legs = Nested("TravelLegSchema", many=True, exclude=("trip",))
+    events = Nested("EventSchema", many=True, exclude=("trip",))
+    posts = Nested("PostSchema", many=True, exclude=("trip",))
+    tasks = Nested("TaskSchema", many=True, exclude=("trip",))
     admins = Nested("UserSchema", many=True, exclude=("admin_trips",))
 
 
@@ -286,3 +322,14 @@ class TravelLeg(db.Model):
 
     def __repr__(self):
         return f"{self.__tablename__} id:{self.id}"
+
+
+class Lodging(db.Model):
+    __tablename__ = "lodgings"
+
+    id = db.Column(db.Integer, primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
+    link = db.Column(db.String)
+    note = db.Column(db.String)
+
+    trip = db.relationship("Trip", back_populates="lodging")
