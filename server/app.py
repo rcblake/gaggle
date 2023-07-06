@@ -22,6 +22,11 @@ from models import (
     TravelLeg,
 )
 
+from models import User
+from blueprints.users import Users
+
+api.add_resource(Users, "/users")
+
 
 # Views go here!
 

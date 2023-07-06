@@ -43,27 +43,6 @@ class User(db.Model):
         return f"{self.__tablename__} id:{self.id}"
 
 
-class UserSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = User
-        include_relationships = True
-
-    name = fields.String(
-        required=True,
-        validate=validate.length(max=20, error="Name must be less than 20 characters"),
-    )
-    email = fields.Email(required=True, error="invalid email address")
-
-    admin_trips = Nested("TripSchema", many=True, exclude=("admins",))
-
-    tasks = Nested("TaskSchema", many=True, exclude=("user"))
-    posts = Nested("PostSchema", many=True, exclude=("user"))
-    comments = Nested("CommentSchema", many=True, exclude=("user"))
-    post_likes = Nested("PostLikeSchema", many=True, exclude=("user"))
-    comment_likes = Nested("TripUserSchema", many=True, exclude=("user",))
-    travel_legs = Nested("TripUserSchema", many=True, exclude=("user",))
-
-
 class Trip(db.Model):
     __tablename__ = "trips"
 
@@ -99,11 +78,11 @@ class TripSchema(SQLAlchemyAutoSchema):
 
     name = fields.String(
         required=True,
-        validate=validate.length(max=20, error="Name must be less than 20 characters"),
+        validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
     start_date = fields.Date(
         required=True,
-        validate=validate.range(
+        validate=validate.Range(
             min=date.today(), error="Start date must be in the future"
         ),
     )
