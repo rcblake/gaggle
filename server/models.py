@@ -11,7 +11,6 @@ from config import (
     validates,
 )
 from marshmallow_sqlalchemy.fields import Nested
-from datetime import date
 
 
 class User(db.Model):
@@ -21,7 +20,7 @@ class User(db.Model):
 
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
-    _password_hash = db.Column(db.String, nullable=False)
+    # _password_hash = db.Column(db.String, nullable=False)
     profile_pic = db.Column(db.String, nullable=True)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())

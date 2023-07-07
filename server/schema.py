@@ -25,11 +25,14 @@ from models import (
     Lodging,
 )
 
+from datetime import date
+
 
 class UserSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = User
         include_relationships = True
+        load_instance = True
 
     name = fields.String(
         required=True,
@@ -37,14 +40,15 @@ class UserSchema(SQLAlchemyAutoSchema):
     )
     email = fields.Email(required=True, error="invalid email address")
 
-    admin_trips = Nested("TripSchema", many=True, exclude=("admins",))
+    trips = Nested("TripUserSchema")
+    admin_trips = Nested("TripSchema", exclude=("admins",))
 
-    tasks = Nested("TaskSchema", many=True, exclude=("user"))
-    posts = Nested("PostSchema", many=True, exclude=("user"))
-    comments = Nested("CommentSchema", many=True, exclude=("user"))
-    post_likes = Nested("PostLikeSchema", many=True, exclude=("user"))
-    comment_likes = Nested("CommentLikeSchema", many=True, exclude=("user",))
-    travel_legs = Nested("TravelLegSchema", many=True, exclude=("user",))
+    tasks = Nested("UserTaskSchema", exclude=("user",))
+    posts = Nested("PostSchema", exclude=("user",))
+    comments = Nested("CommentSchema", exclude=("user",))
+    post_likes = Nested("PostLikeSchema", exclude=("user",))
+    comment_likes = Nested("CommentLikeSchema", exclude=("user",))
+    travel_legs = Nested("TravelLegSchema", exclude=("user",))
 
 
 class TripSchema(SQLAlchemyAutoSchema):
@@ -64,12 +68,12 @@ class TripSchema(SQLAlchemyAutoSchema):
     )
 
     lodging = Nested("LodgingSchema", exclude=("trip",))
-    users = Nested("TripUserSchema", many=True, exclude=("trip",))
-    travel_legs = Nested("TravelLegSchema", many=True, exclude=("trip",))
-    events = Nested("EventSchema", many=True, exclude=("trip",))
-    posts = Nested("PostSchema", many=True, exclude=("trip",))
-    tasks = Nested("TaskSchema", many=True, exclude=("trip",))
-    admins = Nested("UserSchema", many=True, exclude=("admin_trips",))
+    users = Nested("TripUserSchema", exclude=("trip",))
+    travel_legs = Nested("TravelLegSchema", exclude=("trip",))
+    events = Nested("EventSchema", exclude=("trip",))
+    posts = Nested("PostSchema", exclude=("trip",))
+    tasks = Nested("TripTaskSchema", exclude=("trip",))
+    admins = Nested("UserSchema", exclude=("admin_trips",))
 
     @validates("end_date")
     def validate_end_date(self, value, **kwargs):

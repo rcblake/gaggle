@@ -20,12 +20,14 @@ from models import (
     CommentLike,
     Event,
     TravelLeg,
+    Lodging,
 )
 
-from models import User
 from blueprints.users import Users
+from blueprints.users_by_id import UsersByID
 
 api.add_resource(Users, "/users")
+api.add_resource(UsersByID, "/user/<int:id>")
 
 
 # Views go here!
