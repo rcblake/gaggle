@@ -24,10 +24,10 @@ from models import (
 )
 
 from blueprints.users import Users
-from blueprints.users_by_id import UsersByID
+from blueprints.users_by_id import UsersById
 
 api.add_resource(Users, "/users")
-api.add_resource(UsersByID, "/user/<int:id>")
+api.add_resource(UsersById, "/user/<int:id>")
 
 
 # Views go here!

@@ -4,15 +4,16 @@ from config import db
 from models import User
 from schema import UserSchema
 
-user_schema = UserSchema(many=False)
+user_schema = UserSchema()
 
 user_by_id_bp = Blueprint("user_by_id", __name__, url_prefix="/users/<int:id>")
 
 
-class UsersByID(Resource):
+class UsersById(Resource):
     def get(self, id):
-        if user := User.query.filter(User.id == id).first():
-            return make_response(user_schema.dump(user), 200)
+        user = user_schema.dump(db.session.get(User, id))
+        if user:
+            return make_response(user, 200)
         return make_response({"error": "User not found"}, 404)
 
     # def patch(self, id):
