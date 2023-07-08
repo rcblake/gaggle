@@ -15,6 +15,7 @@ faker = "*"
 marshmallow = "*"
 flask-marshmallow = "*"
 datetime = "*"
+ipdb = "*"
 
 [dev-packages]
 
