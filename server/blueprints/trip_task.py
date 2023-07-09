@@ -13,10 +13,17 @@ trip_task_schema = TripTaskSchema()
 
 
 class TripTaskResource(Resource):
-    def get(self):
-        trip_tasks = TripTask.query.all()
-        serialized_trip_tasks = trip_tasks_schema.dump(trip_tasks)
-        return make_response(serialized_trip_tasks, 200)
+    def get(self, trip_task_id=None):
+        if trip_task_id:
+            trip_task = TripTask.query.get(trip_task_id)
+            if not trip_task:
+                return make_response("Trip task not found", 404)
+            serialized_trip_task = trip_task_schema.dump(trip_task)
+            return make_response(serialized_trip_task, 200)
+        else:
+            trip_tasks = TripTask.query.all()
+            serialized_trip_tasks = trip_tasks_schema.dump(trip_tasks)
+            return make_response(serialized_trip_tasks, 200)
 
     def post(self):
         trip_task_data = request.get_json()

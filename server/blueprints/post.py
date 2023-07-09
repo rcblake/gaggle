@@ -13,10 +13,17 @@ post_schema = PostSchema()
 
 
 class PostResource(Resource):
-    def get(self):
-        posts = Post.query.all()
-        serialized_posts = posts_schema.dump(posts)
-        return make_response(serialized_posts, 200)
+    def get(self, post_id=None):
+        if post_id:
+            post = Post.query.get(post_id)
+            if not post:
+                return make_response("Post not found", 404)
+            serialized_post = post_schema.dump(post)
+            return make_response(serialized_post, 200)
+        else:
+            posts = Post.query.all()
+            serialized_posts = posts_schema.dump(posts)
+            return make_response(serialized_posts, 200)
 
     def post(self):
         post_data = request.get_json()
@@ -24,13 +31,6 @@ class PostResource(Resource):
         db.session.add(post)
         db.session.commit()
         return make_response(post_schema.dump(post), 201)
-
-    def get(self, post_id):
-        post = Post.query.get(post_id)
-        if not post:
-            return make_response("Post not found", 404)
-        serialized_post = post_schema.dump(post)
-        return make_response(serialized_post, 200)
 
     def patch(self, post_id):
         post = Post.query.get(post_id)

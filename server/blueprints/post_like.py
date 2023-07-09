@@ -13,10 +13,17 @@ post_like_schema = PostLikeSchema()
 
 
 class PostLikeResource(Resource):
-    def get(self):
-        post_likes = PostLike.query.all()
-        serialized_post_likes = post_likes_schema.dump(post_likes)
-        return make_response(serialized_post_likes, 200)
+    def get(self, post_like_id=None):
+        if post_like_id:
+            post_like = PostLike.query.get(post_like_id)
+            if not post_like:
+                return make_response("Post like not found", 404)
+            serialized_post_like = post_like_schema.dump(post_like)
+            return make_response(serialized_post_like, 200)
+        else:
+            post_likes = PostLike.query.all()
+            serialized_post_likes = post_likes_schema.dump(post_likes)
+            return make_response(serialized_post_likes, 200)
 
     def post(self):
         post_like_data = request.get_json()
@@ -24,13 +31,6 @@ class PostLikeResource(Resource):
         db.session.add(post_like)
         db.session.commit()
         return make_response(post_like_schema.dump(post_like), 201)
-
-    def get(self, post_like_id):
-        post_like = PostLike.query.get(post_like_id)
-        if not post_like:
-            return make_response("Post like not found", 404)
-        serialized_post_like = post_like_schema.dump(post_like)
-        return make_response(serialized_post_like, 200)
 
     def patch(self, post_like_id):
         post_like = PostLike.query.get(post_like_id)

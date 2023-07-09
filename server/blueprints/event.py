@@ -13,10 +13,17 @@ event_schema = EventSchema()
 
 
 class EventResource(Resource):
-    def get(self):
-        events = Event.query.all()
-        serialized_events = events_schema.dump(events)
-        return make_response(serialized_events, 200)
+    def get(self, event_id=None):
+        if event_id:
+            event = Event.query.get(event_id)
+            if not event:
+                return make_response("Event not found", 404)
+            serialized_event = event_schema.dump(event)
+            return make_response(serialized_event, 200)
+        else:
+            events = Event.query.all()
+            serialized_events = events_schema.dump(events)
+            return make_response(serialized_events, 200)
 
     def post(self):
         event_data = request.get_json()
@@ -24,13 +31,6 @@ class EventResource(Resource):
         db.session.add(event)
         db.session.commit()
         return make_response(event_schema.dump(event), 201)
-
-    def get(self, event_id):
-        event = Event.query.get(event_id)
-        if not event:
-            return make_response("Event not found", 404)
-        serialized_event = event_schema.dump(event)
-        return make_response(serialized_event, 200)
 
     def patch(self, event_id):
         event = Event.query.get(event_id)
