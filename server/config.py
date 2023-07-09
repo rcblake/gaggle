@@ -11,6 +11,8 @@ from flask_bcrypt import Bcrypt
 from marshmallow import Schema, fields, ValidationError, validate, validates
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, SQLAlchemyAutoSchema
+from dotenv import load_dotenv
+from os import environ
 
 
 # Local imports
@@ -20,6 +22,9 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
+
+load_dotenv(".env")
+app.secret_key = environ.get("SECRET_KEY")
 
 # Define metadata, instantiate db
 metadata = MetaData(

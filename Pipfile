@@ -16,6 +16,7 @@ marshmallow = "*"
 flask-marshmallow = "*"
 datetime = "*"
 ipdb = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

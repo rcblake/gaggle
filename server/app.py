@@ -39,7 +39,7 @@ from schema import (
     LodgingSchema,
 )
 
-from blueprints.users import UserResource, user_bp
+from blueprints.user import UserResource, user_bp
 from blueprints.trip import TripResource, trip_bp
 from blueprints.trip_user import TripUserResource, trip_user_bp
 from blueprints.trip_task import TripTaskResource, trip_task_bp
