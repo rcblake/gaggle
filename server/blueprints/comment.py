@@ -12,18 +12,18 @@ comments_schema = CommentSchema(many=True)
 comment_schema = CommentSchema()
 
 
-class CommentResource(Resource):
+class Comment(Resource):
     def get(self, comment_id=None):
         if comment_id:
             comment = Comment.query.get(comment_id)
             if not comment:
                 return make_response("Comment not found", 404)
-            serialized_comment = comment_schema.dump(comment)
-            return make_response(serialized_comment, 200)
+            comment = comment_schema.dump(comment)
+            return make_response(comment, 200)
         else:
             comments = Comment.query.all()
-            serialized_comments = comments_schema.dump(comments)
-            return make_response(serialized_comments, 200)
+            comments = comments_schema.dump(comments)
+            return make_response(comments, 200)
 
     def post(self):
         comment_data = request.get_json()

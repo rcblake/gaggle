@@ -12,18 +12,18 @@ comment_likes_schema = CommentLikeSchema(many=True)
 comment_like_schema = CommentLikeSchema()
 
 
-class CommentLikeResource(Resource):
+class CommentLike(Resource):
     def get(self, comment_like_id=None):
         if comment_like_id:
             comment_like = CommentLike.query.get(comment_like_id)
             if not comment_like:
                 return make_response("Comment like not found", 404)
-            serialized_comment_like = comment_like_schema.dump(comment_like)
-            return make_response(serialized_comment_like, 200)
+            comment_like = comment_like_schema.dump(comment_like)
+            return make_response(comment_like, 200)
         else:
             comment_likes = CommentLike.query.all()
-            serialized_comment_likes = comment_likes_schema.dump(comment_likes)
-            return make_response(serialized_comment_likes, 200)
+            comment_likes = comment_likes_schema.dump(comment_likes)
+            return make_response(comment_likes, 200)
 
     def post(self):
         comment_like_data = request.get_json()

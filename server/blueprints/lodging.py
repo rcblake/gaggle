@@ -11,18 +11,18 @@ lodgings_schema = LodgingSchema(many=True)
 lodging_schema = LodgingSchema()
 
 
-class LodgingResource(Resource):
+class Lodging(Resource):
     def get(self, lodging_id=None):
         if lodging_id:
             lodging = Lodging.query.get(lodging_id)
             if not lodging:
                 return make_response("Lodging not found", 404)
-            serialized_lodging = lodging_schema.dump(lodging)
-            return make_response(serialized_lodging, 200)
+            lodging = lodging_schema.dump(lodging)
+            return make_response(lodging, 200)
         else:
             lodgings = Lodging.query.all()
-            serialized_lodgings = lodgings_schema.dump(lodgings)
-            return make_response(serialized_lodgings, 200)
+            lodgings = lodgings_schema.dump(lodgings)
+            return make_response(lodgings, 200)
 
     def post(self):
         lodging_data = request.get_json()

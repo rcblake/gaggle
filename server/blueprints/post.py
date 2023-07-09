@@ -12,18 +12,18 @@ posts_schema = PostSchema(many=True)
 post_schema = PostSchema()
 
 
-class PostResource(Resource):
+class Post(Resource):
     def get(self, post_id=None):
         if post_id:
             post = Post.query.get(post_id)
             if not post:
                 return make_response("Post not found", 404)
-            serialized_post = post_schema.dump(post)
-            return make_response(serialized_post, 200)
+            post = post_schema.dump(post)
+            return make_response(post, 200)
         else:
             posts = Post.query.all()
-            serialized_posts = posts_schema.dump(posts)
-            return make_response(serialized_posts, 200)
+            posts = posts_schema.dump(posts)
+            return make_response(posts, 200)
 
     def post(self):
         post_data = request.get_json()

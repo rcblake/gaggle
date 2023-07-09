@@ -10,18 +10,18 @@ trips_schema = TripSchema(many=True)
 trip_schema = TripSchema()
 
 
-class TripResource(Resource):
+class Trip(Resource):
     def get(self, trip_id=None):
         if trip_id:
             trip = Trip.query.get(trip_id)
             if not trip:
                 return make_response("Trip not found", 404)
-            serialized_trips = trip_schema.dump(trip)
-            return make_response(serialized_trips, 200)
+            trips = trip_schema.dump(trip)
+            return make_response(trips, 200)
         else:
             trips = Trip.query.all()
-            serialized_trips = trips_schema.dump(trips)
-            return make_response(serialized_trips, 200)
+            trips = trips_schema.dump(trips)
+            return make_response(trips, 200)
 
     def post(self):
         trip_data = request.get_json()

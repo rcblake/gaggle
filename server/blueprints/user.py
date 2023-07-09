@@ -10,18 +10,18 @@ users_schema = UserSchema(many=True)
 user_schema = UserSchema()
 
 
-class UserResource(Resource):
+class User(Resource):
     def get(self, user_id=None):
         if user_id:
             user = User.query.get(user_id)
             if not user:
                 return make_response("User not found", 404)
-            serialized_user = user_schema.dump(user)
-            return make_response(serialized_user, 200)
+            user = user_schema.dump(user)
+            return make_response(user, 200)
         else:
             users = User.query.all()
-            serialized_users = users_schema.dump(users)
-            return make_response(serialized_users, 200)
+            users = users_schema.dump(users)
+            return make_response(users, 200)
 
     def post(self):
         user_data = request.get_json()

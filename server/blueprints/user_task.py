@@ -12,18 +12,18 @@ user_tasks_schema = UserTaskSchema(many=True)
 user_task_schema = UserTaskSchema()
 
 
-class UserTaskResource(Resource):
+class UserTask(Resource):
     def get(self, user_task_id=None):
         if user_task_id:
             user_task = UserTask.query.get(user_task_id)
             if not user_task:
                 return make_response("User task not found", 404)
-            serialized_user_task = user_task_schema.dump(user_task)
-            return make_response(serialized_user_task, 200)
+            user_task = user_task_schema.dump(user_task)
+            return make_response(user_task, 200)
         else:
             user_tasks = UserTask.query.all()
-            serialized_user_tasks = user_tasks_schema.dump(user_tasks)
-            return make_response(serialized_user_tasks, 200)
+            user_tasks = user_tasks_schema.dump(user_tasks)
+            return make_response(user_tasks, 200)
 
     def post(self):
         user_task_data = request.get_json()
@@ -36,8 +36,8 @@ class UserTaskResource(Resource):
         user_task = UserTask.query.get(user_task_id)
         if not user_task:
             return make_response("User task not found", 404)
-        serialized_user_task = user_task_schema.dump(user_task)
-        return make_response(serialized_user_task, 200)
+        user_task = user_task_schema.dump(user_task)
+        return make_response(user_task, 200)
 
     def patch(self, user_task_id):
         user_task = UserTask.query.get(user_task_id)

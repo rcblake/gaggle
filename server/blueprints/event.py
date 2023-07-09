@@ -12,18 +12,18 @@ events_schema = EventSchema(many=True)
 event_schema = EventSchema()
 
 
-class EventResource(Resource):
+class Event(Resource):
     def get(self, event_id=None):
         if event_id:
             event = Event.query.get(event_id)
             if not event:
                 return make_response("Event not found", 404)
-            serialized_event = event_schema.dump(event)
-            return make_response(serialized_event, 200)
+            event = event_schema.dump(event)
+            return make_response(event, 200)
         else:
             events = Event.query.all()
-            serialized_events = events_schema.dump(events)
-            return make_response(serialized_events, 200)
+            events = events_schema.dump(events)
+            return make_response(events, 200)
 
     def post(self):
         event_data = request.get_json()
