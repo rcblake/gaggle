@@ -5,7 +5,7 @@ from schema import PostLikeSchema
 from config import db
 
 
-post_like_bp = Blueprint("post_like", __name__, url_prefix="/post-likes")
+post_like_bp = Blueprint("post_like", __name__, url_prefix="/post_likes")
 api = Api(post_like_bp)
 
 post_likes_schema = PostLikeSchema(many=True)

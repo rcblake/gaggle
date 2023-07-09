@@ -5,7 +5,7 @@ from schema import TripTaskSchema
 from config import db
 
 
-trip_task_bp = Blueprint("trip_task", __name__, url_prefix="/trip-tasks")
+trip_task_bp = Blueprint("trip_task", __name__, url_prefix="/trip_tasks")
 api = Api(trip_task_bp)
 
 trip_tasks_schema = TripTaskSchema(many=True)

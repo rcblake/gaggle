@@ -5,18 +5,24 @@ from schema import TravelLegSchema
 from config import db
 
 
-travel_leg_bp = Blueprint("travel_leg", __name__, url_prefix="/travel-legs")
-api = Api(travel_leg_bp)
+travel_leg_bp = Blueprint("travel_leg", __name__, url_prefix="/travel_legs")
 
 travel_legs_schema = TravelLegSchema(many=True)
 travel_leg_schema = TravelLegSchema()
 
 
 class TravelLegResource(Resource):
-    def get(self):
-        travel_legs = TravelLeg.query.all()
-        serialized_travel_legs = travel_legs_schema.dump(travel_legs)
-        return make_response(serialized_travel_legs, 200)
+    def get(self, travel_leg_id=None):
+        if travel_leg_id:
+            travel_leg = TravelLeg.query.get(travel_leg_id)
+            if not travel_leg:
+                return make_response("Travel leg not found", 404)
+            serialized_travel_leg = travel_leg_schema.dump(travel_leg)
+            return make_response(serialized_travel_leg, 200)
+        else:
+            travel_legs = TravelLeg.query.all()
+            serialized_travel_legs = travel_legs_schema.dump(travel_legs)
+            return make_response(serialized_travel_legs, 200)
 
     def post(self):
         travel_leg_data = request.get_json()
@@ -24,13 +30,6 @@ class TravelLegResource(Resource):
         db.session.add(travel_leg)
         db.session.commit()
         return make_response(travel_leg_schema.dump(travel_leg), 201)
-
-    def get(self, travel_leg_id):
-        travel_leg = TravelLeg.query.get(travel_leg_id)
-        if not travel_leg:
-            return make_response("Travel leg not found", 404)
-        serialized_travel_leg = travel_leg_schema.dump(travel_leg)
-        return make_response(serialized_travel_leg, 200)
 
     def patch(self, travel_leg_id):
         travel_leg = TravelLeg.query.get(travel_leg_id)

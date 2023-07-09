@@ -67,16 +67,18 @@ app.register_blueprint(lodging_bp)
 
 api.add_resource(UserResource, "/users", "/users/<int:user_id>")
 api.add_resource(TripResource, "/trips", "/trips/<int:trip_id>")
-api.add_resource(TripUserResource, "/", "/<int:trip_user_id>")
-api.add_resource(TripTaskResource, "/", "/<int:trip_task_id>")
-api.add_resource(UserTaskResource, "/", "/<int:user_task_id>")
-api.add_resource(PostResource, "/", "/<int:post_id>")
-api.add_resource(CommentResource, "/", "/<int:comment_id>")
-api.add_resource(PostLikeResource, "/", "/<int:post_like_id>")
-api.add_resource(CommentLikeResource, "/", "/<int:comment_like_id>")
-api.add_resource(EventResource, "/", "/<int:event_id>")
-api.add_resource(TravelLegResource, "/", "/<int:travel_leg_id>")
-api.add_resource(LodgingResource, "/", "/<int:lodging_id>")
+api.add_resource(TripUserResource, "/trip_users", "/trip_users/<int:trip_user_id>")
+api.add_resource(TripTaskResource, "/trip_tasks", "/trip_tasks/<int:trip_task_id>")
+api.add_resource(UserTaskResource, "/user_tasks", "/user_tasks/<int:user_task_id>")
+api.add_resource(PostResource, "/posts", "/posts/<int:post_id>")
+api.add_resource(CommentResource, "/comments", "/comments/<int:comment_id>")
+api.add_resource(PostLikeResource, "/post_likes", "/post_likes/<int:post_like_id>")
+api.add_resource(
+    CommentLikeResource, "/comment_likes", "/comment_likes/<int:comment_like_id>"
+)
+api.add_resource(EventResource, "/events", "/events/<int:event_id>")
+api.add_resource(TravelLegResource, "/travel_legs", "/travel_legs/<int:travel_leg_id>")
+api.add_resource(LodgingResource, "/lodgings", "/lodgings/<int:lodging_id>")
 
 
 # from schema import UserSchema

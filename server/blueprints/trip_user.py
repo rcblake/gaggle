@@ -4,7 +4,7 @@ from flask_restful import Resource
 from models import TripUser
 from schema import TripUserSchema
 
-trip_user_bp = Blueprint("trip_user", __name__, url_prefix="/trip-users")
+trip_user_bp = Blueprint("trip_user", __name__, url_prefix="/trip_users")
 
 trip_users_schema = TripUserSchema(many=True)
 trip_user_schema = TripUserSchema()

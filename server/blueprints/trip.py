@@ -11,10 +11,17 @@ trip_schema = TripSchema()
 
 
 class TripResource(Resource):
-    def get(self):
-        trips = Trip.query.all()
-        serialized_trips = trips_schema.dump(trips)
-        return make_response(serialized_trips, 200)
+    def get(self, trip_id=None):
+        if trip_id:
+            trip = Trip.query.get(trip_id)
+            if not trip:
+                return make_response("Trip not found", 404)
+            serialized_trips = trip_schema.dump(trip)
+            return make_response(serialized_trips, 200)
+        else:
+            trips = Trip.query.all()
+            serialized_trips = trips_schema.dump(trips)
+            return make_response(serialized_trips, 200)
 
     def post(self):
         trip_data = request.get_json()
@@ -22,13 +29,6 @@ class TripResource(Resource):
         db.session.add(trip)
         db.session.commit()
         return make_response(trip_schema.dump(trip), 201)
-
-    def get(self, trip_id):
-        trip = Trip.query.get(trip_id)
-        if not trip:
-            return make_response("Trip not found", 404)
-        serialized_trip = trip_schema.dump(trip)
-        return make_response(serialized_trip, 200)
 
     def patch(self, trip_id):
         trip = Trip.query.get(trip_id)
