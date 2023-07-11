@@ -11,7 +11,7 @@ travel_legs_schema = TravelLegSchema(many=True)
 travel_leg_schema = TravelLegSchema()
 
 
-class TravelLeg(Resource):
+class TravelLegBP(Resource):
     def get(self, travel_leg_id=None):
         if travel_leg_id:
             travel_leg = TravelLeg.query.get(travel_leg_id)

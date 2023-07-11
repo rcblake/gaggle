@@ -12,7 +12,7 @@ trip_tasks_schema = TripTaskSchema(many=True)
 trip_task_schema = TripTaskSchema()
 
 
-class TripTask(Resource):
+class TripTaskBP(Resource):
     def get(self, trip_task_id=None):
         if trip_task_id:
             trip_task = TripTask.query.get(trip_task_id)

@@ -6,7 +6,7 @@ from models.user import User
 logout_bp = Blueprint("logout", __name__, url_prefix="/logout")
 
 
-class Logout(Resource):
+class LogoutBP(Resource):
     def delete(self):
         if session.get("user_id"):
             session["user_id"] = None

@@ -12,7 +12,7 @@ posts_schema = PostSchema(many=True)
 post_schema = PostSchema()
 
 
-class Post(Resource):
+class PostBP(Resource):
     def get(self, post_id=None):
         if post_id:
             post = Post.query.get(post_id)

@@ -1,16 +1,8 @@
-from sqlalchemy_serializer import SerializerMixin
 from config import (
     db,
     bcrypt,
-    Schema,
-    fields,
-    ValidationError,
-    SQLAlchemySchema,
-    SQLAlchemyAutoSchema,
-    validate,
-    validates,
 )
-from marshmallow_sqlalchemy.fields import Nested
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class User(db.Model):
@@ -20,7 +12,7 @@ class User(db.Model):
 
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
-    # _password_hash = db.Column(db.String, nullable=False)
+    _password_hash = db.Column(db.String, nullable=False)
     profile_pic = db.Column(db.String, nullable=True)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -39,6 +31,18 @@ class User(db.Model):
     post_likes = db.relationship("PostLike", back_populates="user")
     comment_likes = db.relationship("CommentLike", back_populates="user")
     travel_legs = db.relationship("TravelLeg", back_populates="user")
+
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError("Password hashes may not be viewed")
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode("utf-8"))
+        self._password_hash = password_hash.decode("utf-8")
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode("utf-8"))
 
 
 class Trip(db.Model):

@@ -12,7 +12,7 @@ comments_schema = CommentSchema(many=True)
 comment_schema = CommentSchema()
 
 
-class Comment(Resource):
+class CommentBP(Resource):
     def get(self, comment_id=None):
         if comment_id:
             comment = Comment.query.get(comment_id)

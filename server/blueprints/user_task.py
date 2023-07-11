@@ -12,7 +12,7 @@ user_tasks_schema = UserTaskSchema(many=True)
 user_task_schema = UserTaskSchema()
 
 
-class UserTask(Resource):
+class UserTaskBP(Resource):
     def get(self, user_task_id=None):
         if user_task_id:
             user_task = UserTask.query.get(user_task_id)

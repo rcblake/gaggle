@@ -12,7 +12,7 @@ events_schema = EventSchema(many=True)
 event_schema = EventSchema()
 
 
-class Event(Resource):
+class EventBP(Resource):
     def get(self, event_id=None):
         if event_id:
             event = Event.query.get(event_id)

@@ -10,7 +10,7 @@ trip_users_schema = TripUserSchema(many=True)
 trip_user_schema = TripUserSchema()
 
 
-class TripUser(Resource):
+class TripUserBP(Resource):
     def get(self, trip_user_id=None):
         if trip_user_id:
             trip_user = TripUser.query.get(trip_user_id)

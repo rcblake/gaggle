@@ -12,7 +12,7 @@ comment_likes_schema = CommentLikeSchema(many=True)
 comment_like_schema = CommentLikeSchema()
 
 
-class CommentLike(Resource):
+class CommentLikeBP(Resource):
     def get(self, comment_like_id=None):
         if comment_like_id:
             comment_like = CommentLike.query.get(comment_like_id)

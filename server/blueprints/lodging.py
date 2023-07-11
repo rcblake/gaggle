@@ -11,7 +11,7 @@ lodgings_schema = LodgingSchema(many=True)
 lodging_schema = LodgingSchema()
 
 
-class Lodging(Resource):
+class LodgingBP(Resource):
     def get(self, lodging_id=None):
         if lodging_id:
             lodging = Lodging.query.get(lodging_id)

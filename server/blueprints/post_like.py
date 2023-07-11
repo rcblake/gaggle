@@ -12,7 +12,7 @@ post_likes_schema = PostLikeSchema(many=True)
 post_like_schema = PostLikeSchema()
 
 
-class PostLike(Resource):
+class PostLikeBP(Resource):
     def get(self, post_like_id=None):
         if post_like_id:
             post_like = PostLike.query.get(post_like_id)

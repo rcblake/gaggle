@@ -10,7 +10,7 @@ users_schema = UserSchema(many=True)
 user_schema = UserSchema()
 
 
-class User(Resource):
+class UserBP(Resource):
     def get(self, user_id=None):
         if user_id:
             user = User.query.get(user_id)
