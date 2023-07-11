@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import ipdb
-from flask import make_response
 
 # Standard library imports
 

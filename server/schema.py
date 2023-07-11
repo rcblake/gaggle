@@ -4,7 +4,6 @@ from config import (
     Schema,
     fields,
     ValidationError,
-    SQLAlchemySchema,
     SQLAlchemyAutoSchema,
     validate,
     validates,
