@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 
+import TripForm from "./TripForm";
+import TravelLegForm from "./TravelLegForm";
+import AttendeeForm from "./AttendeeForm";
+
 function App() {
   return (
     <>
-      <AppBar />
+      {/* <AppBar />
       <Home />
-      <Trip />
+      <Trip /> */}
+      <TripForm />
+      <TravelLegForm />
+      <AttendeeForm />
     </>
   );
 }
