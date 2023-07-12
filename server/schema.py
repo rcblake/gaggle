@@ -34,7 +34,6 @@ class UserSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
     name = fields.String(
-        required=True,
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
     email = fields.Email(required=True, error="invalid email address")

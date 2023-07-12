@@ -19,14 +19,14 @@ class SignupBP(Resource):
             if User.query.filter(User.email == email).first():
                 return make_response({"error": "email must be unique"}, 400)
 
-            new_user = User(email=email, public_acct=True)
-            new_user.password_hash = password
+            new_user = User(email=email)
+            new_user._password_hash = password
 
             db.session.add(new_user)
             db.session.commit()
 
             session["user_id"] = new_user.id
 
-            return make_response(UserSchema.dump(new_user), 201)
+            return make_response(UserSchema.dumps(new_user), 201)
         except Exception as e:
             return make_response({"error": [str(e)]}, 422)

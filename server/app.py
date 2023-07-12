@@ -22,6 +22,7 @@ from blueprints.travel_leg import TravelLegBP, travel_leg_bp
 from blueprints.lodging import LodgingBP, lodging_bp
 from blueprints.check_session import CheckSessionBP, check_session_bp
 from blueprints.signup import SignupBP, signup_bp
+from blueprints.login import LoginBP, login_bp
 
 app.register_blueprint(user_bp)
 app.register_blueprint(trip_bp)
@@ -37,6 +38,7 @@ app.register_blueprint(travel_leg_bp)
 app.register_blueprint(lodging_bp)
 app.register_blueprint(check_session_bp)
 app.register_blueprint(signup_bp)
+app.register_blueprint(login_bp)
 
 api.add_resource(UserBP, "/users", "/users/<int:user_id>")
 api.add_resource(TripBP, "/trips", "/trips/<int:trip_id>")
@@ -54,6 +56,7 @@ api.add_resource(TravelLegBP, "/travel_legs", "/travel_legs/<int:travel_leg_id>"
 api.add_resource(LodgingBP, "/lodgings", "/lodgings/<int:lodging_id>")
 api.add_resource(CheckSessionBP, "/check_session")
 api.add_resource(SignupBP, "/signup")
+api.add_resource(LoginBP, "/login")
 
 
 # Views go here!

@@ -6,14 +6,14 @@ from schema import UserSchema
 login_bp = Blueprint("login", __name__, url_prefix="/login")
 
 
-class Login(Resource):
+class LoginBP(Resource):
     def post(self):
         try:
             data = request.get_json()
 
-            username = data.get("username")
+            email = data.get("email")
             password = data.get("password")
-            if user := User.query.filter(User.username == username).first():
+            if user := User.query.filter(User.email == email).first():
                 if user.authenticate(password):
                     session["user_id"] = user.id
                     return make_response(UserSchema.dump(user), 200)

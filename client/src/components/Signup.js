@@ -38,31 +38,21 @@ export default function Signup({ currentUser, updateCurrentUser }) {
   };
 
   const UserSchema = yup.object().shape({
-    username: yup
-      .string()
-      .min(5, "Username must be at least 5 characters")
-      .max(20, "Username must be at most 20 characters")
-      .test(
-        "valid-chs",
-        "Username may only contain letters and numbers",
-        (value) => {
-          return /^[A-z0-9]+$/.test(value);
-        }
-      )
-      .required("Username is required"),
+    email: yup.string().email().required("email is required"),
     password: yup
       .string()
-      .min(10, "Password must be at least 10 characters")
+      .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validationSchema: UserSchema,
     onSubmit: (values) => {
+      debugger;
       fetch("/signup", {
         method: "POST",
         headers: {
@@ -71,6 +61,7 @@ export default function Signup({ currentUser, updateCurrentUser }) {
         body: JSON.stringify(values),
       })
         .then((res) => {
+          debugger;
           if (res.ok) {
             res.json().then((data) => {
               updateCurrentUser(data);

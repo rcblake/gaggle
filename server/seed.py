@@ -23,10 +23,12 @@ fake = Faker()
 def create_fake_user():
     name = fake.name()
     email = fake.email()
-    # password = fake.password()
+    _password_hash = fake.password()
     profile_pic = fake.image_url()
 
-    user = User(name=name, email=email, profile_pic=profile_pic)
+    user = User(
+        name=name, email=email, _password_hash=_password_hash, profile_pic=profile_pic
+    )
     db.session.add(user)
     db.session.commit()
 

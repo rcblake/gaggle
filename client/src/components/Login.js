@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -39,17 +39,18 @@ export default function Login({ currentUser, updateCurrentUser }) {
   };
 
   const userSchema = yup.object().shape({
-    username: yup.string().required("Username is required"),
+    email: yup.string().email().required("email is required"),
     password: yup.string().required("Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
+      debugger;
       fetch("/login", {
         method: "POST",
         headers: {
@@ -58,10 +59,10 @@ export default function Login({ currentUser, updateCurrentUser }) {
         body: JSON.stringify(values),
       })
         .then((res) => {
+          debugger;
           if (res.ok) {
             res.json().then((data) => {
               updateCurrentUser(data);
-              navigate("/");
             });
           } else {
             res.json().then((err) => setErrors(err.error));
@@ -94,12 +95,12 @@ export default function Login({ currentUser, updateCurrentUser }) {
               <TextField
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
+                id="email"
+                label="email"
+                name="email"
                 onChange={formik.handleChange}
               />
-              <p style={{ color: "red" }}>{formik.errors.username}</p>
+              <p style={{ color: "red" }}>{formik.errors.email}</p>
             </Grid>
             <Grid item xs={12}>
               <TextField

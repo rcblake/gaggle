@@ -10,7 +10,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String)
     email = db.Column(db.String, nullable=False)
     _password_hash = db.Column(db.String, nullable=False)
     profile_pic = db.Column(db.String, nullable=True)
