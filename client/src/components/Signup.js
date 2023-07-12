@@ -20,8 +20,6 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-import Error from "./Error";
-
 const defaultTheme = createTheme();
 
 export default function Signup({ currentUser, updateCurrentUser }) {
@@ -110,12 +108,12 @@ export default function Signup({ currentUser, updateCurrentUser }) {
                 <TextField
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
+                  id="email"
+                  label="email"
+                  name="email"
                   onChange={formik.handleChange}
                 />
-                <p style={{ color: "red" }}>{formik.errors.username}</p>
+                <p style={{ color: "red" }}>{formik.errors.email}</p>
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -143,7 +141,6 @@ export default function Signup({ currentUser, updateCurrentUser }) {
                 <p style={{ color: "red" }}>{formik.errors.password}</p>
               </Grid>
             </Grid>
-            {errors ? <Error msg={errors} /> : null}
             <Button
               type="submit"
               fullWidth
