@@ -1,7 +1,5 @@
-from blueprints import request, session, Resource, Blueprint, make_response, g, abort
-from blueprints.user_by_id import user_schema
+from blueprints import session, Resource, Blueprint, make_response, g, abort
 from models import db
-from models.user import User
 
 logout_bp = Blueprint("logout", __name__, url_prefix="/logout")
 
