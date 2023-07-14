@@ -55,11 +55,11 @@ class TripSchema(SQLAlchemyAutoSchema):
         model = Trip
         include_relationships = True
 
-    tripName = fields.String(
+    name = fields.String(
         required=True,
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
-    startDate = fields.Date(
+    start_date = fields.Date(
         required=True,
         validate=validate.Range(
             min=date.today(), error="Start date must be in the future"
@@ -92,7 +92,8 @@ class TripSchema(SQLAlchemyAutoSchema):
 
     @validates("end_date")
     def validate_end_date(self, value, **kwargs):
-        if value < self.start_date:
+        start_date = self.start_date
+        if value < start_date:
             raise ValidationError("End date must be after Start date")
 
 

@@ -38,36 +38,36 @@ export default function TripForm() {
         <label>Trip Name:</label>
         <input
           type="text"
-          name="tripName"
-          {...register("tripName", {
+          name="name"
+          {...register("name", {
             required: "Name is required",
           })}
         />
-        {errors.tripName && (
-          <p className="errorMsg">{errors.tripName.message}</p>
-        )}
+        {errors.name && <p className="errorMsg">{errors.name.message}</p>}
         <label>Location:</label>
         <input type="text" name="location" {...register("location", {})} />
         <label>Start Date:</label>
         <input
           type="date"
-          name="startDate"
-          {...register("startDate", {
+          name="start_date"
+          {...register("start_date", {
             required: "Start Date is required",
           })}
         />
-        {errors.startDate && (
-          <p className="errorMsg">{errors.startDate.message}</p>
+        {errors.start_date && (
+          <p className="errorMsg">{errors.start_date.message}</p>
         )}
         <label>End Date:</label>
         <input
           type="date"
-          name="endDate"
-          {...register("endDate", {
+          name="end_date"
+          {...register("end_date", {
             required: "End Date is required",
           })}
         />
-        {errors.endDate && <p className="errorMsg">{errors.endDate.message}</p>}
+        {errors.end_date && (
+          <p className="errorMsg">{errors.end_date.message}</p>
+        )}
         <input type="submit" />
       </form>
     </div>

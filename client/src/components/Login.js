@@ -61,6 +61,7 @@ export default function Login({ currentUser, updateCurrentUser }) {
           if (res.ok) {
             res.json().then((data) => {
               updateCurrentUser(data);
+              navigate("/");
             });
           } else {
             res.json().then((err) => setErrors(err.error));

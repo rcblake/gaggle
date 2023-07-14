@@ -1,7 +1,7 @@
 import React from "react";
 
 import TripCard from "./TripCard";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Home({ currentUser }) {
   const navigate = useNavigate();
@@ -14,7 +14,18 @@ export default function Home({ currentUser }) {
 
   return (
     <>
-      <button onClick={handleAddClick}>Plan a trip</button>
+      {currentUser ? (
+        <button onClick={handleAddClick}>Plan a trip</button>
+      ) : (
+        <>
+          <Link to="/login">
+            <button>Log In</button>
+          </Link>
+          <Link to="/signup">
+            <button>Sign Up</button>
+          </Link>
+        </>
+      )}
       {/* <div>
         {trips.map((trip) => (
           <TripCard key={trip.id} trip={trip} />
