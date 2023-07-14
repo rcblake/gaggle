@@ -1,15 +1,13 @@
 import React from "react";
 import AttendeeForm from "./AttendeeForm";
 
-function AttendeeContainer({ trip }) {
-  const attendees = trip.users;
+export default function AttendeeContainer({ trip }) {
   return (
     <>
-      {attendees.map((attendee) => (
-        <p>{attendee.email}</p>
-      ))}
-      <AttendeeForm />
+      {/* {trip.users.map((user) => (
+        <p key={user.user.id}>{user.user.email}</p>
+      ))} */}
+      <AttendeeForm trip={trip} />
     </>
   );
 }
-export default AttendeeContainer;

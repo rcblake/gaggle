@@ -18,22 +18,22 @@ export default function Trip({ currentUser }) {
         }
       })
       .then((trip) => {
-        debugger;
-        if (trip.users?.includes(currentUser)) {
-          setTrip(trip);
-        } else {
-          navigate("/404");
-        }
+        console.log(trip);
+        // if (trip.users?.includes(currentUser)) {
+        setTrip(trip);
+        // } else {
+        //   navigate("/404");
+        // }
       })
       .catch((err) => {
         console.error(err);
       });
   }, [id]);
-
   return (
     <>
       {/* <TripHeader /> */}
-      {/* <AttendeeContainer trip={trip} /> */}
+      <h2>{trip.name}</h2>
+      <AttendeeContainer trip={trip} />
       <Itineraries trip={trip} />
     </>
   );

@@ -1,15 +1,43 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export default function AttendeeForm() {
+export default function AttendeeForm({ trip }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
-  console.log(errors);
+  const onSubmit = async (data) => {
+    try {
+      const getResponse = await fetch("/users?email=" + data.email);
+      const users = await getResponse.json();
+      if (users.length > 0) {
+        const user = users[0];
+        const newTripUser = {
+          user_id: user.id,
+          trip_id: trip.id,
+          is_admin: false,
+        };
+        const postResponse = await fetch("/trip_users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTripUser),
+        });
+        if (postResponse.ok) {
+          console.log("User data successfully posted to '/trip_users'.");
+        } else {
+          console.error("Failed to post user data to '/trip_users'.");
+        }
+      } else {
+        console.log("User with the provided email does not exist.");
+      }
+    } catch (error) {
+      console.error("An error occurred while processing the request:", error);
+    }
+  };
 
   return (
     <div>

@@ -54,6 +54,7 @@ class TripSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Trip
         include_relationships = True
+        load_instance = True
 
     name = fields.String(
         required=True,
@@ -101,6 +102,11 @@ class TripUserSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = TripUser
         include_relationships = True
+        load_instance = True
+
+    user_id = fields.Integer(required=True)
+    trip_id = fields.Integer(required=True)
+    is_admin = fields.Boolean(missing=False)
 
     user = Nested("UserSchema", exclude=("trips",))
     trip = Nested("TripSchema", exclude=("users",))
@@ -119,6 +125,8 @@ class UserTaskSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = UserTask
         include_relationships = True
+        load_instance = True
+
         exclude = ("parent_task",)
 
 
@@ -126,6 +134,7 @@ class UserTaskSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = UserTask
         include_relationships = True
+        load_instance = True
 
     user = Nested("UserSchema", exclude=("tasks",))
 
@@ -134,6 +143,7 @@ class PostSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Post
         include_relationships = True
+        load_instance = True
 
     trip = Nested("TripSchema", only=("id",))
     user = Nested("UserSchema", only=("id", "name"))
@@ -145,6 +155,7 @@ class CommentSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Comment
         include_relationships = True
+        load_instance = True
 
     post = Nested("PostSchema", exclude=("comments",))
     user = Nested("UserSchema", only=("id", "name"))
@@ -155,6 +166,7 @@ class PostLikeSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = PostLike
         include_relationships = True
+        load_instance = True
 
     post = Nested("PostSchema", exclude=("post_likes",))
     user = Nested("UserSchema", only=("id", "name"))
@@ -164,6 +176,7 @@ class CommentLikeSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = CommentLike
         include_relationships = True
+        load_instance = True
 
     comment = Nested("CommentSchema", exclude=("comment_likes",))
     user = Nested("UserSchema", only=("id", "name"))
@@ -173,6 +186,7 @@ class EventSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Event
         include_relationships = True
+        load_instance = True
 
     trip = Nested("TripSchema", exclude=("events",))
 
@@ -181,6 +195,7 @@ class TravelLegSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = TravelLeg
         include_relationships = True
+        load_instance = True
 
     trip = Nested("TripSchema", only=("id",))
     user = Nested("UserSchema", only=("id", "name"))
@@ -190,5 +205,6 @@ class LodgingSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Lodging
         include_relationships = True
+        load_instance = True
 
     trip = Nested("TripSchema", only=("lodging",))
