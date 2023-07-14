@@ -241,7 +241,7 @@ if __name__ == "__main__":
         # Create fake comments
         posts = Post.query.filter_by(trip_id=trip.id).all()
         for post in posts:
-            for _ in range(10):
+            for _ in range(2):
                 create_fake_comment(post, users[fake.random_int(0, len(users) - 1)])
 
         # Create fake post likes

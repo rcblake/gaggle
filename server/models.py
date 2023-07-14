@@ -25,7 +25,7 @@ class User(db.Model):
     travel_legs = db.relationship("TravelLeg", back_populates="user")
 
     trips = db.relationship(
-        "Trip", secondary="trip_users", back_populates="users", viewonly=True
+        "TripUser", back_populates="user", viewonly=True, overlaps="admin_trips"
     )
     admin_trips = db.relationship(
         "Trip",
@@ -67,15 +67,16 @@ class Trip(db.Model):
     posts = db.relationship("Post", back_populates="trip")
     tasks = db.relationship("TripTask", back_populates="trip")
 
-    users = db.relationship(
-        "TripUser", back_populates="trip", overlaps="admin_trips", viewonly=True
-    )
     admins = db.relationship(
         "User",
         secondary="trip_users",
         back_populates="admin_trips",
         primaryjoin="and_(Trip.id == TripUser.trip_id, TripUser.is_admin)",
         viewonly=True,
+    )
+
+    users = db.relationship(
+        "TripUser", back_populates="trip", viewonly=True, overlaps="admin_trips"
     )
 
 

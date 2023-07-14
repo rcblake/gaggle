@@ -109,6 +109,7 @@ class TripTaskSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = TripTask
         include_relationships = True
+        exclude = ("child_tasks",)
 
     trip = Nested("TripSchema", only=("trip.id",))
 
@@ -117,6 +118,7 @@ class UserTaskSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = UserTask
         include_relationships = True
+        exclude = ("parent_task",)
 
 
 class UserTaskSchema(SQLAlchemyAutoSchema):
@@ -132,7 +134,7 @@ class PostSchema(SQLAlchemyAutoSchema):
         model = Post
         include_relationships = True
 
-    trip = Nested("TripSchema", exclude=("posts",))
+    trip = Nested("TripSchema", only=("id",))
     user = Nested("UserSchema", only=("id", "name"))
     comments = Nested("CommentSchema", many=True, exclude=("post",))
     post_likes = Nested("PostLikeSchema", many=True, exclude=("post",))
