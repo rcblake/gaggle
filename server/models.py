@@ -9,7 +9,6 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-
     name = db.Column(db.String)
     email = db.Column(db.String, nullable=False)
     _password_hash = db.Column(db.String, nullable=False)
@@ -18,19 +17,23 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    trips = db.relationship(
-        "TripUser", back_populates="user", overlaps="admin_trips,admins", viewonly=True
-    )
-    admin_trips = db.relationship(
-        "Trip", secondary="trip_users", back_populates="admins", overlaps="trips"
-    )
     tasks = db.relationship("UserTask", back_populates="user")
-
     posts = db.relationship("Post", back_populates="user")
     comments = db.relationship("Comment", back_populates="user")
     post_likes = db.relationship("PostLike", back_populates="user")
     comment_likes = db.relationship("CommentLike", back_populates="user")
     travel_legs = db.relationship("TravelLeg", back_populates="user")
+
+    trips = db.relationship(
+        "Trip", secondary="trip_users", back_populates="users", viewonly=True
+    )
+    admin_trips = db.relationship(
+        "Trip",
+        secondary="trip_users",
+        back_populates="admins",
+        primaryjoin="and_(User.id == TripUser.user_id, TripUser.is_admin)",
+        viewonly=True,
+    )
 
     @hybrid_property
     def password_hash(self):
@@ -58,18 +61,22 @@ class Trip(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    users = db.relationship(
-        "TripUser", back_populates="trip", overlaps="admin_trips", viewonly=True
-    )
-    admins = db.relationship(
-        "User", secondary="trip_users", back_populates="admin_trips", overlaps="trips"
-    )
-
     lodging = db.relationship("Lodging", back_populates="trip")
     travel_legs = db.relationship("TravelLeg", back_populates="trip")
     events = db.relationship("Event", back_populates="trip")
     posts = db.relationship("Post", back_populates="trip")
     tasks = db.relationship("TripTask", back_populates="trip")
+
+    users = db.relationship(
+        "TripUser", back_populates="trip", overlaps="admin_trips", viewonly=True
+    )
+    admins = db.relationship(
+        "User",
+        secondary="trip_users",
+        back_populates="admin_trips",
+        primaryjoin="and_(Trip.id == TripUser.trip_id, TripUser.is_admin)",
+        viewonly=True,
+    )
 
 
 class TripUser(db.Model):

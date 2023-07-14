@@ -231,7 +231,7 @@ if __name__ == "__main__":
             trip_task = create_fake_trip_task(trip)
 
             # Create fake user tasks for each trip task
-            for _ in range(20):
+            for _ in range(10):
                 create_fake_user_task(trip_task)
 
         # Create fake posts
@@ -241,7 +241,7 @@ if __name__ == "__main__":
         # Create fake comments
         posts = Post.query.filter_by(trip_id=trip.id).all()
         for post in posts:
-            for _ in range(20):
+            for _ in range(10):
                 create_fake_comment(post, users[fake.random_int(0, len(users) - 1)])
 
         # Create fake post likes
@@ -259,7 +259,7 @@ if __name__ == "__main__":
                 )
 
         # Create fake events
-        for _ in range(10):
+        for _ in range(3):
             create_fake_event(trip)
 
         # Create fake travel legs

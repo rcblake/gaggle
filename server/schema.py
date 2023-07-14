@@ -37,16 +37,17 @@ class UserSchema(SQLAlchemyAutoSchema):
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
     email = fields.Email(required=True, error="invalid email address")
+    _password_hash = fields.String(load_only=True)
 
-    trips = Nested("TripUserSchema")
-    admin_trips = Nested("TripSchema", exclude=("admins",))
+    trips = Nested("TripUserSchema", only=("trip.id", "trip.name", "trip."))
+    admin_trips = Nested("TripSchema", many=True)
 
-    tasks = Nested("UserTaskSchema")
-    posts = Nested("PostSchema")
-    comments = Nested("CommentSchema")
-    post_likes = Nested("PostLikeSchema")
-    comment_likes = Nested("CommentLikeSchema")
-    travel_legs = Nested("TravelLegSchema")
+    tasks = Nested("UserTaskSchema", many=True)
+    posts = Nested("PostSchema", many=True)
+    comments = Nested("CommentSchema", many=True)
+    post_likes = Nested("PostLikeSchema", many=True)
+    comment_likes = Nested("CommentLikeSchema", many=True)
+    travel_legs = Nested("TravelLegSchema", many=True)
 
 
 class TripSchema(SQLAlchemyAutoSchema):
@@ -109,7 +110,7 @@ class TripTaskSchema(SQLAlchemyAutoSchema):
         model = TripTask
         include_relationships = True
 
-    trip = Nested("TripSchema", exclude=("tasks",))
+    trip = Nested("TripSchema", only=("trip.id",))
 
 
 class UserTaskSchema(SQLAlchemyAutoSchema):
@@ -133,8 +134,8 @@ class PostSchema(SQLAlchemyAutoSchema):
 
     trip = Nested("TripSchema", exclude=("posts",))
     user = Nested("UserSchema", only=("id", "name"))
-    comments = Nested("CommentSchema", exclude=("post",))
-    post_likes = Nested("PostLikeSchema", exclude=("post",))
+    comments = Nested("CommentSchema", many=True, exclude=("post",))
+    post_likes = Nested("PostLikeSchema", many=True, exclude=("post",))
 
 
 class CommentSchema(SQLAlchemyAutoSchema):
@@ -144,7 +145,7 @@ class CommentSchema(SQLAlchemyAutoSchema):
 
     post = Nested("PostSchema", exclude=("comments",))
     user = Nested("UserSchema", only=("id", "name"))
-    comment_likes = Nested("CommentLikeSchema", exclude=("comment",))
+    comment_likes = Nested("CommentLikeSchema", many=True, exclude=("comment",))
 
 
 class PostLikeSchema(SQLAlchemyAutoSchema):
@@ -178,7 +179,7 @@ class TravelLegSchema(SQLAlchemyAutoSchema):
         model = TravelLeg
         include_relationships = True
 
-    trip = Nested("TripSchema", exclude=("travel_legs",))
+    trip = Nested("TripSchema", only=("id",))
     user = Nested("UserSchema", only=("id", "name"))
 
 
