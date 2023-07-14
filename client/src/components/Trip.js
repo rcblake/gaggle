@@ -32,9 +32,9 @@ export default function Trip({ currentUser }) {
   return (
     <>
       {/* <TripHeader /> */}
-      <h2>{trip.name}</h2>
-      <AttendeeContainer trip={trip} />
-      <Itineraries trip={trip} />
+      <h2>Trip:{trip.name}</h2>
+      <AttendeeContainer trip={trip} currentUser={currentUser} />
+      <Itineraries trip={trip} currentUser={currentUser} />
     </>
   );
 }
