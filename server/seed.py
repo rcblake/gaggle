@@ -265,3 +265,6 @@ if __name__ == "__main__":
         # Create fake travel legs
         for user in users:
             create_fake_travel_leg(trip, user)
+
+        for _ in range(1):
+            create_fake_trip_lodging(trip)

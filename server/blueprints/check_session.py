@@ -9,6 +9,10 @@ check_session_bp = Blueprint("check_session", __name__, url_prefix="/check_sessi
 
 class CheckSessionBP(Resource):
     def get(self):
-        if id := session.get("user_id"):
-            if user := db.session.get(User, id):
-                return make_response(UserSchema.dump(user), 200)
+        if "user_id" in session:
+            user_id = session["user_id"]
+            user = db.session.query(User).get(user_id)
+            if user:
+                user_schema = UserSchema()
+                user_data = user_schema.dump(user)
+                return make_response(user_data, 200)

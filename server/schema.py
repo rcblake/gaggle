@@ -41,12 +41,12 @@ class UserSchema(SQLAlchemyAutoSchema):
     trips = Nested("TripUserSchema")
     admin_trips = Nested("TripSchema", exclude=("admins",))
 
-    tasks = Nested("UserTaskSchema", exclude=("user",))
-    posts = Nested("PostSchema", exclude=("user",))
-    comments = Nested("CommentSchema", exclude=("user",))
-    post_likes = Nested("PostLikeSchema", exclude=("user",))
-    comment_likes = Nested("CommentLikeSchema", exclude=("user",))
-    travel_legs = Nested("TravelLegSchema", exclude=("user",))
+    tasks = Nested("UserTaskSchema")
+    posts = Nested("PostSchema")
+    comments = Nested("CommentSchema")
+    post_likes = Nested("PostLikeSchema")
+    comment_likes = Nested("CommentLikeSchema")
+    travel_legs = Nested("TravelLegSchema")
 
 
 class TripSchema(SQLAlchemyAutoSchema):
@@ -54,24 +54,40 @@ class TripSchema(SQLAlchemyAutoSchema):
         model = Trip
         include_relationships = True
 
-    name = fields.String(
+    tripName = fields.String(
         required=True,
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
-    start_date = fields.Date(
+    startDate = fields.Date(
         required=True,
         validate=validate.Range(
             min=date.today(), error="Start date must be in the future"
         ),
     )
 
-    lodging = Nested("LodgingSchema", exclude=("trip",))
-    users = Nested("TripUserSchema", exclude=("trip",))
-    travel_legs = Nested("TravelLegSchema", exclude=("trip",))
-    events = Nested("EventSchema", exclude=("trip",))
-    posts = Nested("PostSchema", exclude=("trip",))
-    tasks = Nested("TripTaskSchema", exclude=("trip",))
-    admins = Nested("UserSchema", exclude=("admin_trips",))
+    lodging = Nested("LodgingSchema", many=True, exclude=("trip",))
+    users = Nested(
+        "TripUserSchema",
+        many=True,
+        only=(
+            "user.id",
+            "user.name",
+            "user.email",
+        ),
+    )
+    travel_legs = Nested("TravelLegSchema", many=True, exclude=("trip",))
+    events = Nested("EventSchema", many=True, exclude=("trip",))
+    posts = Nested("PostSchema", many=True, exclude=("trip",))
+    tasks = Nested("TripTaskSchema", many=True, exclude=("trip",))
+    admins = Nested(
+        "UserSchema",
+        many=True,
+        only=(
+            "id",
+            "name",
+            "email",
+        ),
+    )
 
     @validates("end_date")
     def validate_end_date(self, value, **kwargs):
@@ -116,7 +132,7 @@ class PostSchema(SQLAlchemyAutoSchema):
         include_relationships = True
 
     trip = Nested("TripSchema", exclude=("posts",))
-    user = Nested("UserSchema", exclude=("posts",))
+    user = Nested("UserSchema", only=("id", "name"))
     comments = Nested("CommentSchema", exclude=("post",))
     post_likes = Nested("PostLikeSchema", exclude=("post",))
 
@@ -127,7 +143,7 @@ class CommentSchema(SQLAlchemyAutoSchema):
         include_relationships = True
 
     post = Nested("PostSchema", exclude=("comments",))
-    user = Nested("UserSchema", exclude=("comments",))
+    user = Nested("UserSchema", only=("id", "name"))
     comment_likes = Nested("CommentLikeSchema", exclude=("comment",))
 
 
@@ -137,7 +153,7 @@ class PostLikeSchema(SQLAlchemyAutoSchema):
         include_relationships = True
 
     post = Nested("PostSchema", exclude=("post_likes",))
-    user = Nested("UserSchema", exclude=("post_likes",))
+    user = Nested("UserSchema", only=("id", "name"))
 
 
 class CommentLikeSchema(SQLAlchemyAutoSchema):
@@ -146,7 +162,7 @@ class CommentLikeSchema(SQLAlchemyAutoSchema):
         include_relationships = True
 
     comment = Nested("CommentSchema", exclude=("comment_likes",))
-    user = Nested("UserSchema", exclude=("comment_likes",))
+    user = Nested("UserSchema", only=("id", "name"))
 
 
 class EventSchema(SQLAlchemyAutoSchema):
@@ -163,7 +179,7 @@ class TravelLegSchema(SQLAlchemyAutoSchema):
         include_relationships = True
 
     trip = Nested("TripSchema", exclude=("travel_legs",))
-    user = Nested("UserSchema", exclude=("travel_legs",))
+    user = Nested("UserSchema", only=("id", "name"))
 
 
 class LodgingSchema(SQLAlchemyAutoSchema):
@@ -171,4 +187,4 @@ class LodgingSchema(SQLAlchemyAutoSchema):
         model = Lodging
         include_relationships = True
 
-    trip = Nested("TripSchema", exclude=("lodging",))
+    trip = Nested("TripSchema", only=("lodging",))

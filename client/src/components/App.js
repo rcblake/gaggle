@@ -6,6 +6,8 @@ import TravelLegForm from "./TravelLegForm";
 import AttendeeForm from "./AttendeeForm";
 import Signup from "./Signup";
 import Login from "./Login";
+import Home from "./Home";
+import Trip from "./Trip";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -21,15 +23,11 @@ export default function App() {
   const updateCurrentUser = (updated_user) => {
     setCurrentUser(updated_user);
   };
-
   return (
     <>
       {/* <AppBar />
-      <Home />
-      <Trip /> */}
-      <TripForm />
-      <TravelLegForm />
-      <AttendeeForm />
+      
+      */}
       <Routes>
         <Route
           path="/login"
@@ -40,6 +38,8 @@ export default function App() {
             />
           }
         />
+        <Route path="/trips/:id" element={<Trip currentUser={currentUser} />} />
+
         <Route
           path="/signup"
           element={
@@ -49,7 +49,11 @@ export default function App() {
             />
           }
         />
-        <Route path="/" />
+        <Route
+          path="/trip_form"
+          element={<TripForm currentUser={currentUser} />}
+        />
+        <Route path="/" element={<Home currentUser={currentUser} />} />
       </Routes>
     </>
   );

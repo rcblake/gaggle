@@ -50,7 +50,6 @@ export default function Login({ currentUser, updateCurrentUser }) {
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      debugger;
       fetch("/login", {
         method: "POST",
         headers: {
@@ -59,7 +58,6 @@ export default function Login({ currentUser, updateCurrentUser }) {
         body: JSON.stringify(values),
       })
         .then((res) => {
-          debugger;
           if (res.ok) {
             res.json().then((data) => {
               updateCurrentUser(data);
