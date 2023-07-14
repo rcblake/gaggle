@@ -8,6 +8,7 @@ import Signup from "./Signup";
 import Login from "./Login";
 import Home from "./Home";
 import Trip from "./Trip";
+import { Link } from "react-router-dom";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -28,6 +29,15 @@ export default function App() {
       {/* <AppBar />
       
       */}
+      <Link to="/login">
+        <button>Log In</button>
+      </Link>
+      <Link to="/signup">
+        <button>Sign Up</button>
+      </Link>
+      <Link to="/logout">
+        <button>Log Out</button>
+      </Link>
       <Routes>
         <Route
           path="/login"

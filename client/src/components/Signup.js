@@ -25,9 +25,6 @@ const defaultTheme = createTheme();
 export default function Signup({ currentUser, updateCurrentUser }) {
   const navigate = useNavigate();
 
-  if (currentUser) {
-    navigate("/");
-  }
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState(null);
 
