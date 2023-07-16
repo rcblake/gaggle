@@ -14,6 +14,7 @@ from models import (
     CommentLike,
     Event,
     TravelLeg,
+    Lodging,
 )
 
 fake = Faker()
@@ -22,10 +23,12 @@ fake = Faker()
 def create_fake_user():
     name = fake.name()
     email = fake.email()
-    password = fake.password()
+    _password_hash = fake.password()
     profile_pic = fake.image_url()
 
-    user = User(name=name, email=email, password=password, profile_pic=profile_pic)
+    user = User(
+        name=name, email=email, _password_hash=_password_hash, profile_pic=profile_pic
+    )
     db.session.add(user)
     db.session.commit()
 
@@ -44,7 +47,6 @@ def create_fake_trip():
         start_date=start_date,
         end_date=end_date,
         location=location,
-        lodging=lodging,
     )
     db.session.add(trip)
     db.session.commit()
@@ -187,6 +189,17 @@ def create_fake_travel_leg(trip, user):
     return travel_leg
 
 
+def create_fake_trip_lodging(trip):
+    link = fake.url()
+    note = fake.paragraph()
+
+    lodging = Lodging(trip=trip, link=link, note=note)
+    db.session.add(lodging)
+    db.session.commit()
+
+    return lodging
+
+
 # Usage example:
 if __name__ == "__main__":
     with app.app_context():
@@ -201,6 +214,7 @@ if __name__ == "__main__":
         CommentLike.query.delete()
         Event.query.delete()
         TravelLeg.query.delete()
+        Lodging.query.delete()
 
         # Create some fake users
         users = [create_fake_user() for _ in range(5)]
@@ -217,7 +231,7 @@ if __name__ == "__main__":
             trip_task = create_fake_trip_task(trip)
 
             # Create fake user tasks for each trip task
-            for _ in range(2):
+            for _ in range(10):
                 create_fake_user_task(trip_task)
 
         # Create fake posts
@@ -251,3 +265,6 @@ if __name__ == "__main__":
         # Create fake travel legs
         for user in users:
             create_fake_travel_leg(trip, user)
+
+        for _ in range(1):
+            create_fake_trip_lodging(trip)

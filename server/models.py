@@ -1,67 +1,51 @@
-from sqlalchemy_serializer import SerializerMixin
 from config import (
     db,
     bcrypt,
-    Schema,
-    fields,
-    ValidationError,
-    SQLAlchemySchema,
-    SQLAlchemyAutoSchema,
-    validate,
-    validates,
 )
-from marshmallow_sqlalchemy.fields import Nested
-from datetime import date
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String)
     email = db.Column(db.String, nullable=False)
-    _password_hash = db.Column(db.String, nullable=False)
+    _password_hash = db.Column(db.String)
     profile_pic = db.Column(db.String, nullable=True)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    trips = db.relationship("TripUser", back_populates="user")
-    admin_trips = db.relationship(
-        "Trip", secondary="trip_users", back_populates="admins"
-    )
     tasks = db.relationship("UserTask", back_populates="user")
-
     posts = db.relationship("Post", back_populates="user")
     comments = db.relationship("Comment", back_populates="user")
     post_likes = db.relationship("PostLike", back_populates="user")
     comment_likes = db.relationship("CommentLike", back_populates="user")
     travel_legs = db.relationship("TravelLeg", back_populates="user")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class UserSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = User
-        include_relationships = True
-
-    name = fields.String(
-        required=True,
-        validate=validate.length(max=20, error="Name must be less than 20 characters"),
+    trips = db.relationship(
+        "TripUser", back_populates="user", viewonly=True, overlaps="admin_trips"
     )
-    email = fields.Email(required=True, error="invalid email address")
+    admin_trips = db.relationship(
+        "Trip",
+        secondary="trip_users",
+        back_populates="admins",
+        primaryjoin="and_(User.id == TripUser.user_id, TripUser.is_admin)",
+        viewonly=True,
+    )
 
-    admin_trips = Nested("TripSchema", many=True, exclude=("admins",))
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError("Password hashes may not be viewed")
 
-    tasks = Nested("TaskSchema", many=True, exclude=("user"))
-    posts = Nested("PostSchema", many=True, exclude=("user"))
-    comments = Nested("CommentSchema", many=True, exclude=("user"))
-    post_likes = Nested("PostLikeSchema", many=True, exclude=("user"))
-    comment_likes = Nested("TripUserSchema", many=True, exclude=("user",))
-    travel_legs = Nested("TripUserSchema", many=True, exclude=("user",))
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode("utf-8"))
+        self._password_hash = password_hash.decode("utf-8")
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode("utf-8"))
 
 
 class Trip(db.Model):
@@ -70,17 +54,12 @@ class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String, nullable=False)
-    start_date = db.Column(db.DateTime, nullable=False)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date)
     location = db.Column(db.String, nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
-    users = db.relationship("TripUser", back_populates="trip")
-    admins = db.relationship(
-        "User", secondary="trip_users", back_populates="admin_trips"
-    )
 
     lodging = db.relationship("Lodging", back_populates="trip")
     travel_legs = db.relationship("TravelLeg", back_populates="trip")
@@ -88,38 +67,17 @@ class Trip(db.Model):
     posts = db.relationship("Post", back_populates="trip")
     tasks = db.relationship("TripTask", back_populates="trip")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class TripSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Trip
-        include_relationships = True
-
-    name = fields.String(
-        required=True,
-        validate=validate.length(max=20, error="Name must be less than 20 characters"),
-    )
-    start_date = fields.Date(
-        required=True,
-        validate=validate.range(
-            min=date.today(), error="Start date must be in the future"
-        ),
+    admins = db.relationship(
+        "User",
+        secondary="trip_users",
+        back_populates="admin_trips",
+        primaryjoin="and_(Trip.id == TripUser.trip_id, TripUser.is_admin)",
+        viewonly=True,
     )
 
-    lodging = Nested("LodgingSchema", exclude=("trip",))
-    users = Nested("TripUserSchema", many=True, exclude=("trip",))
-    travel_legs = Nested("TravelLegSchema", many=True, exclude=("trip",))
-    events = Nested("EventSchema", many=True, exclude=("trip",))
-    posts = Nested("PostSchema", many=True, exclude=("trip",))
-    tasks = Nested("TaskSchema", many=True, exclude=("trip",))
-    admins = Nested("UserSchema", many=True, exclude=("admin_trips",))
-
-    @validates("end_date")
-    def validate_end_date(self, value, **kwargs):
-        if value < self.start_date:
-            raise ValidationError("End date must be after Start date")
+    users = db.relationship(
+        "TripUser", back_populates="trip", viewonly=True, overlaps="admin_trips"
+    )
 
 
 class TripUser(db.Model):
@@ -133,20 +91,12 @@ class TripUser(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    user = db.relationship("User", back_populates="trips")
-    trip = db.relationship("Trip", back_populates="users")
-
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class TripUserSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = TripUser
-        include_relationships = True
-
-    user = Nested("UserSchema", exclude=("trips",))
-    trip = Nested("TripSchema", exclude=("users",))
+    user = db.relationship(
+        "User", back_populates="trips", overlaps="admin_trips,admins"
+    )
+    trip = db.relationship(
+        "Trip", back_populates="users", overlaps="admin_trips,admins"
+    )
 
 
 # needs: owner currently commented out, nullables, repr
@@ -169,17 +119,6 @@ class TripTask(db.Model):
     child_tasks = db.relationship("UserTask", back_populates="parent_task")
     trip = db.relationship("Trip", back_populates="tasks")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class TripTaskSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = TripTask
-        include_relationships = True
-
-    trip = Nested("TripSchema", exclude=("tasks",))
-
 
 # needs: everything
 class UserTask(db.Model):
@@ -201,17 +140,6 @@ class UserTask(db.Model):
     parent_task = db.relationship("TripTask", back_populates="child_tasks")
     user = db.relationship("User", back_populates="tasks")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class UserTaskSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = UserTask
-        include_relationships = True
-
-    user = Nested("UserSchema", exclude=("tasks",))
-
 
 # needs: everything
 class Post(db.Model):
@@ -230,20 +158,6 @@ class Post(db.Model):
     comments = db.relationship("Comment", back_populates="post")
     post_likes = db.relationship("PostLike", back_populates="post")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class PostSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Post
-        include_relationships = True
-
-    trip = Nested("TripSchema", exclude=("posts",))
-    user = Nested("UserSchema", exclude=("posts",))
-    comments = Nested("CommentSchema", exclude=("post",))
-    post_likes = Nested("PostLikeSchema", exclude=("post",))
-
 
 # needs: everything
 class Comment(db.Model):
@@ -261,19 +175,6 @@ class Comment(db.Model):
     user = db.relationship("User", back_populates="comments")
     comment_likes = db.relationship("CommentLike", back_populates="comment")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class CommentSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Comment
-        include_relationships = True
-
-    post = Nested("PostSchema", exclude=("comments",))
-    user = Nested("UserSchema", exclude=("comments",))
-    comment_likes = Nested("CommentLikeSchema", exclude=("comment",))
-
 
 # needs: everything
 class PostLike(db.Model):
@@ -289,18 +190,6 @@ class PostLike(db.Model):
     post = db.relationship("Post", back_populates="post_likes")
     user = db.relationship("User", back_populates="post_likes")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class PostLikeSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = PostLike
-        include_relationships = True
-
-    post = Nested("PostSchema", exclude=("post_likes",))
-    user = Nested("UserSchema", exclude=("post_likes",))
-
 
 # needs: everything
 class CommentLike(db.Model):
@@ -315,18 +204,6 @@ class CommentLike(db.Model):
 
     comment = db.relationship("Comment", back_populates="comment_likes")
     user = db.relationship("User", back_populates="comment_likes")
-
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class CommentLikeSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = CommentLike
-        include_relationships = True
-
-    comment = Nested("CommentSchema", exclude=("comment_likes",))
-    user = Nested("UserSchema", exclude=("comment_likes",))
 
 
 # needs: everything
@@ -348,17 +225,6 @@ class Event(db.Model):
 
     trip = db.relationship("Trip", back_populates="events")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class EventSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Event
-        include_relationships = True
-
-    trip = Nested("TripSchema", exclude=("events",))
-
 
 # needs: everything
 class TravelLeg(db.Model):
@@ -378,18 +244,6 @@ class TravelLeg(db.Model):
     trip = db.relationship("Trip", back_populates="travel_legs")
     user = db.relationship("User", back_populates="travel_legs")
 
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class TravelLegSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = TravelLeg
-        include_relationships = True
-
-    trip = Nested("TripSchema", exclude=("travel_legs",))
-    user = Nested("UserSchema", exclude=("travel_legs",))
-
 
 class Lodging(db.Model):
     __tablename__ = "lodgings"
@@ -400,14 +254,3 @@ class Lodging(db.Model):
     note = db.Column(db.String)
 
     trip = db.relationship("Trip", back_populates="lodging")
-
-    def __repr__(self):
-        return f"{self.__tablename__} id:{self.id}"
-
-
-class LodgingSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Lodging
-        include_relationships = True
-
-    trip = Nested("TripSchema", exclude=("lodging",))
