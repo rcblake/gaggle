@@ -27,7 +27,7 @@ class TripTaskBP(Resource):
 
     def post(self):
         trip_task_data = request.get_json()
-        trip_task = trip_task_schema.load(trip_task_data)
+        trip_task = trip_task_schema.load(trip_task_data, session=db.session)
         db.session.add(trip_task)
         db.session.commit()
         return make_response(trip_task_schema.dump(trip_task), 201)

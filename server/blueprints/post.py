@@ -27,7 +27,7 @@ class PostBP(Resource):
 
     def post(self):
         post_data = request.get_json()
-        post = post_schema.load(post_data)
+        post = post_schema.load(post_data, session=db.session)
         db.session.add(post)
         db.session.commit()
         return make_response(post_schema.dump(post), 201)

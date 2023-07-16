@@ -11,7 +11,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     email = db.Column(db.String, nullable=False)
-    _password_hash = db.Column(db.String, nullable=False)
+    _password_hash = db.Column(db.String)
     profile_pic = db.Column(db.String, nullable=True)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -54,8 +54,8 @@ class Trip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     name = db.Column(db.String, nullable=False)
-    start_date = db.Column(db.DateTime, nullable=False)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date)
     location = db.Column(db.String, nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())

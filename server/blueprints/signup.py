@@ -27,6 +27,6 @@ class SignupBP(Resource):
 
             session["user_id"] = new_user.id
 
-            return make_response(UserSchema.dumps(new_user), 201)
+            return make_response(UserSchema.dump(new_user), 201)
         except Exception as e:
             return make_response({"error": [str(e)]}, 422)

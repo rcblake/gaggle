@@ -49,7 +49,6 @@ export default function Signup({ currentUser, updateCurrentUser }) {
     },
     validationSchema: UserSchema,
     onSubmit: (values) => {
-      debugger;
       fetch("/signup", {
         method: "POST",
         headers: {
@@ -58,11 +57,10 @@ export default function Signup({ currentUser, updateCurrentUser }) {
         body: JSON.stringify(values),
       })
         .then((res) => {
-          debugger;
           if (res.ok) {
             res.json().then((data) => {
               updateCurrentUser(data);
-              navigate("/");
+              navigate("/home");
             });
           } else {
             res.json().then((err) => setErrors(err.error));

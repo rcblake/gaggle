@@ -37,9 +37,12 @@ class UserSchema(SQLAlchemyAutoSchema):
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
     email = fields.Email(required=True, error="invalid email address")
-    _password_hash = fields.String(load_only=True)
 
-    trips = Nested("TripUserSchema", only=("trip.id", "trip.name", "trip."))
+    trips = Nested(
+        "TripUserSchema",
+        many=True,
+        only=("trip.id", "trip.name", "trip.start_date", "trip.end_date"),
+    )
     admin_trips = Nested("TripSchema", many=True)
 
     tasks = Nested("UserTaskSchema", many=True)
@@ -48,6 +51,12 @@ class UserSchema(SQLAlchemyAutoSchema):
     post_likes = Nested("PostLikeSchema", many=True)
     comment_likes = Nested("CommentLikeSchema", many=True)
     travel_legs = Nested("TravelLegSchema", many=True)
+
+    @validates("email")
+    def validates_email(self, email):
+        if user := User.query.filter(User.email == email).first():
+            if not user.id:
+                raise ValidationError("An account already exists with that email.")
 
 
 class TripSchema(SQLAlchemyAutoSchema):

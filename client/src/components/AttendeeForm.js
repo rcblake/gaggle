@@ -12,8 +12,10 @@ export default function AttendeeForm({ trip }) {
     try {
       const getResponse = await fetch("/users?email=" + data.email);
       const users = await getResponse.json();
+      debugger;
       if (users.length > 0) {
         const user = users[0];
+        debugger;
         const newTripUser = {
           user_id: user.id,
           trip_id: trip.id,

@@ -26,7 +26,7 @@ class TripBP(Resource):
 
     def post(self):
         trip_data = request.get_json()
-        trip = trip_schema.load(trip_data)
+        trip = trip_schema.load(trip_data, session=db.session)
         db.session.add(trip)
         db.session.commit()
         return make_response(trip_schema.dump(trip), 201)

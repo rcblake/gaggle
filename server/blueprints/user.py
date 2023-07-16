@@ -25,7 +25,7 @@ class UserBP(Resource):
 
     def post(self):
         user_data = request.get_json()
-        user = user_schema.load(user_data)
+        user = user_schema.load(user_data, session=db.session)
         db.session.add(user)
         db.session.commit()
         return make_response(user_schema.dump(user), 201)
@@ -35,7 +35,7 @@ class UserBP(Resource):
         if not user:
             return make_response("User not found", 404)
         user_data = request.get_json()
-        user = user_schema.load(user_data, partial=True)
+        user = user_schema.load(user_data, partial=True, session=db.session)
         db.session.commit()
         return make_response(user_schema.dump(user), 200)
 

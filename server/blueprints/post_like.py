@@ -27,7 +27,7 @@ class PostLikeBP(Resource):
 
     def post(self):
         post_like_data = request.get_json()
-        post_like = post_like_schema.load(post_like_data)
+        post_like = post_like_schema.load(post_like_data, session=db.session)
         db.session.add(post_like)
         db.session.commit()
         return make_response(post_like_schema.dump(post_like), 201)

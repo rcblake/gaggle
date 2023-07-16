@@ -14,7 +14,7 @@ function TripCard({ trip }) {
     <div onClick={handleTripClick}>
       <h5>{trip.name}</h5>
       <p>
-        {trip.startDate}-{trip.endDate}
+        {trip.start_date} - {trip.end_date}
       </p>
     </div>
   );
