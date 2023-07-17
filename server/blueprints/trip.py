@@ -1,5 +1,5 @@
 from flask import Blueprint, make_response, request
-from config import db
+from config import db, ValidationError
 from flask_restful import Api, Resource
 from models import Trip
 from schema import TripSchema
@@ -26,19 +26,34 @@ class TripBP(Resource):
 
     def post(self):
         trip_data = request.get_json()
-        trip = trip_schema.load(trip_data, session=db.session)
-        db.session.add(trip)
-        db.session.commit()
-        return make_response(trip_schema.dump(trip), 201)
+
+        try:
+            trip = trip_schema.load(trip_data, session=db.session)
+            db.session.add(trip)
+            db.session.commit()
+            return make_response(trip_schema.dump(trip), 201)
+        except ValidationError as e:
+            return make_response({"errors": e.messages}, 400)
+        except Exception as e:
+            return make_response(
+                {"error": "An error occurred while processing the request"}, 500
+            )
 
     def patch(self, trip_id):
         trip = Trip.query.get(trip_id)
         if not trip:
             return make_response("Trip not found", 404)
+
         trip_data = request.get_json()
-        trip.name = trip_data.get("name", trip.name)
-        # Update other fields as needed
+        errors = trip_schema.validate(trip_data, partial=True)
+        if errors:
+            return make_response(errors, 400)
+        trip_schema.validate(trip_data, partial=True)
+
+        for field, value in trip_data.items():
+            setattr(trip, field, value)
         db.session.commit()
+
         return make_response(trip_schema.dump(trip), 200)
 
     def delete(self, trip_id):

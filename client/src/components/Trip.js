@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
 import { useNavigate, useParams } from "react-router";
+import TripEditForm from "./TripEditForm";
 
 export default function Trip({ currentUser }) {
   const [trip, setTrip] = useState({});
@@ -29,42 +30,18 @@ export default function Trip({ currentUser }) {
       });
   }, [id]);
 
-  const handleAttendeeAdd = (newAttendee) =>
-    setTrip((prevState) => {
-      return {
-        ...prevState,
-        users: [
-          ...prevState.users,
-          {
-            user: {
-              email: newAttendee.email,
-              id: newAttendee.id,
-              name: newAttendee.name,
-            },
-          },
-        ],
-      };
-    });
+  const handleEdit = () => {};
+  const handleDelete = () => {};
 
-  const handleTravelLegAdd = (newTravelLeg) =>
-    setTrip((prevState) => {
-      const obj = {
-        ...prevState,
-        travel_legs: [...prevState.travel_legs, newTravelLeg],
-      };
-      console.log(obj);
-      return obj;
-    });
   return (
     <>
       {/* <TripHeader /> */}
       <h2>Trip:{trip.name}</h2>
-      <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
-      <Itineraries
-        trip={trip}
-        currentUser={currentUser}
-        handleTravelLegAdd={handleTravelLegAdd}
-      />
+      Edit:
+      <TripEditForm trip={trip} />
+      <button onClick={handleDelete}>Delete Trip</button>
+      <AttendeeContainer trip={trip} currentUser={currentUser} />
+      <Itineraries trip={trip} currentUser={currentUser} />
     </>
   );
 }

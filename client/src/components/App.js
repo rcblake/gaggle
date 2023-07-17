@@ -13,21 +13,24 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   fetch("/check_session").then((res) => {
-  //     if (res.ok) {
-  //       res.json().then(setCurrentUser);
-  //     }
-  //   });
-  // }, []);
-
   useEffect(() => {
-    fetch("users/1").then((res) => {
+    fetch("/check_session").then((res) => {
       if (res.ok) {
         res.json().then(setCurrentUser);
       }
     });
   }, []);
+
+  // useEffect(
+  //   () =>
+  //     fetch("users/1").then((res) => {
+  //       if (res.ok) {
+  //         res.json().then(setCurrentUser);
+  //         return;
+  //       }
+  //     }),
+  //   []
+  // );
 
   const updateCurrentUser = (updated_user) => {
     setCurrentUser(updated_user);
@@ -49,14 +52,23 @@ export default function App() {
       
       */}
       <h4>currentUser: {currentUser?.email || null}</h4>
-      <Link to="/login">
-        <button>Log In</button>
-      </Link>
-      <Link to="/signup">
-        <button>Sign Up</button>
-      </Link>
-
-      <button onClick={logout}>Log Out</button>
+      {currentUser ? (
+        <>
+          <Link to="/">
+            <button>Home</button>
+          </Link>
+          <button onClick={logout}>Log Out</button>
+        </>
+      ) : (
+        <>
+          <Link to="/login">
+            <button>Log In</button>
+          </Link>
+          <Link to="/signup">
+            <button>Sign Up</button>
+          </Link>
+        </>
+      )}
 
       <Routes>
         <Route
@@ -84,7 +96,14 @@ export default function App() {
           path="/trip_form"
           element={<TripForm currentUser={currentUser} />}
         />
-        <Route path="/" element={<Home currentUser={currentUser} />} />
+        <Route
+          path="/trip_form/:id"
+          element={<TripForm currentUser={currentUser} />}
+        />
+        <Route
+          path="/"
+          element={currentUser ? <Home currentUser={currentUser} /> : null}
+        />
       </Routes>
     </>
   );

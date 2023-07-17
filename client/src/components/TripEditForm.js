@@ -2,11 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
-export default function TripForm() {
+export default function TripEditForm({ trip }) {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
@@ -15,7 +14,7 @@ export default function TripForm() {
     try {
       console.log(data);
       const response = await fetch("/trips", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -64,7 +63,6 @@ export default function TripForm() {
           name="end_date"
           {...register("end_date", {
             required: "End Date is required",
-            validate: (value) => value > getValues().start_date,
           })}
         />
         {errors.end_date && (
