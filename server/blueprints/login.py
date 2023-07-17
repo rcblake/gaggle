@@ -4,6 +4,7 @@ from models import User
 from schema import UserSchema
 
 login_bp = Blueprint("login", __name__, url_prefix="/login")
+user_schema = UserSchema()
 
 
 class LoginBP(Resource):
@@ -16,7 +17,7 @@ class LoginBP(Resource):
             if user := User.query.filter(User.email == email).first():
                 if user.authenticate(password):
                     session["user_id"] = user.id
-                    return make_response(UserSchema.dump(user), 200)
-            return make_response({"error": "Invalid credentials"}, 401)
+                    return make_response(user_schema.dump(user), 200)
+            return make_response({"error": "Invalid credentials1"}, 401)
         except:
-            return make_response({"error": "Invalid credentials"}, 401)
+            return make_response({"error": "Invalid credentials2"}, 401)

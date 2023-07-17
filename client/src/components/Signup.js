@@ -127,6 +127,7 @@ export default function Signup({ currentUser, updateCurrentUser }) {
                 <p style={{ color: "red" }}>{formik.errors.password}</p>
               </Grid>
             </Grid>
+
             <Button
               type="submit"
               fullWidth

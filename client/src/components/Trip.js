@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
 import { useNavigate, useParams } from "react-router";
+import TripEditForm from "./TripEditForm";
 
 export default function Trip({ currentUser }) {
   const [trip, setTrip] = useState({});
@@ -18,7 +19,6 @@ export default function Trip({ currentUser }) {
         }
       })
       .then((trip) => {
-        console.log(trip);
         // if (trip.users?.includes(currentUser)) {
         setTrip(trip);
         // } else {
@@ -29,10 +29,17 @@ export default function Trip({ currentUser }) {
         console.error(err);
       });
   }, [id]);
+
+  const handleEdit = () => {};
+  const handleDelete = () => {};
+
   return (
     <>
       {/* <TripHeader /> */}
       <h2>Trip:{trip.name}</h2>
+      Edit:
+      <TripEditForm trip={trip} />
+      <button onClick={handleDelete}>Delete Trip</button>
       <AttendeeContainer trip={trip} currentUser={currentUser} />
       <Itineraries trip={trip} currentUser={currentUser} />
     </>

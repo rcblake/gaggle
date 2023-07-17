@@ -6,6 +6,7 @@ from config import (
     ValidationError,
     SQLAlchemyAutoSchema,
     validate,
+    validates_schema,
     validates,
 )
 from marshmallow_sqlalchemy.fields import Nested
@@ -75,6 +76,9 @@ class TripSchema(SQLAlchemyAutoSchema):
             min=date.today(), error="Start date must be in the future"
         ),
     )
+    end_date = fields.Date(
+        required=True,
+    )
 
     lodging = Nested("LodgingSchema", many=True, exclude=("trip",))
     users = Nested(
@@ -100,11 +104,12 @@ class TripSchema(SQLAlchemyAutoSchema):
         ),
     )
 
-    @validates("end_date")
-    def validate_end_date(self, value, **kwargs):
-        start_date = self.start_date
-        if value < start_date:
-            raise ValidationError("End date must be after Start date")
+    @validates_schema
+    def validate_end_date(self, data, **kwargs):
+        start = data.get("start_date")
+        end = data.get("end_date")
+        if end < start:
+            raise ValidationError("End date must be after start date")
 
 
 class TripUserSchema(SQLAlchemyAutoSchema):
