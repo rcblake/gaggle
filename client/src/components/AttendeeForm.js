@@ -29,9 +29,9 @@ export default function AttendeeForm({ trip }) {
           body: JSON.stringify(newTripUser),
         });
         if (postResponse.ok) {
-          console.log("User data successfully posted to '/trip_users'.");
+          console.log("user added to trip");
         } else {
-          console.error("Failed to post user data to '/trip_users'.");
+          console.error("failed to add user to trip.");
         }
       } else {
         console.log("User with the provided email does not exist.");

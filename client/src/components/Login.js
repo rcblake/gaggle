@@ -16,9 +16,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-
 import { useFormik } from "formik";
 import * as yup from "yup";
+
+import Error from "./Error";
 
 const defaultTheme = createTheme();
 
@@ -56,6 +57,7 @@ export default function Login({ currentUser, updateCurrentUser }) {
         .then((res) => {
           if (res.ok) {
             res.json().then((data) => {
+              console.log(data);
               updateCurrentUser(data);
               navigate("/");
             });
@@ -122,6 +124,7 @@ export default function Login({ currentUser, updateCurrentUser }) {
               />
               <p style={{ color: "red" }}>{formik.errors.password}</p>
             </Grid>
+            {errors ? <Error msg={errors} /> : null}
             <Button
               type="submit"
               fullWidth
