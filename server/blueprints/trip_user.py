@@ -3,6 +3,7 @@ from config import db
 from flask_restful import Resource
 from models import TripUser
 from schema import TripUserSchema
+from sqlalchemy import and_
 
 trip_user_bp = Blueprint("trip_user", __name__, url_prefix="/trip_users")
 
@@ -25,7 +26,13 @@ class TripUserBP(Resource):
 
     def post(self):
         trip_user_data = request.get_json()
+        t_id = trip_user_data.get("trip_id")
+        u_id = trip_user_data.get("user_id")
         trip_user = trip_user_schema.load(trip_user_data, session=db.session)
+        if TripUser.query.filter(
+            and_(trip_user.trip_id == t_id, trip_user.user_id == u_id)
+        ).first():
+            return make_response({"error": "User already on Trip"}, 400)
         db.session.add(trip_user)
         db.session.commit()
         return make_response(trip_user_schema.dump(trip_user), 201)

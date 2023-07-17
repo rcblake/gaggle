@@ -1,27 +1,46 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export default function TravelLegForm({ trip, currentUser }) {
+export default function TravelLegForm({
+  trip,
+  currentUser,
+  handleTravelLegAdd,
+}) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
-    // const newTravelLeg = {
-
-    // }
     try {
+      const newTravelLeg = {
+        trip: {
+          id: trip.id,
+        },
+        user: {
+          id: currentUser.id,
+          name: currentUser.name,
+        },
+        travel_type: data.travelDirection,
+        departure_time: data.departureTime,
+        arrival_time: data.arrivalTime,
+        flight_number: data.note,
+      };
+      console.log(newTravelLeg);
+      debugger;
       const postResponse = await fetch("/travel_legs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(newTravelLeg),
       });
       if (postResponse.ok) {
+        handleTravelLegAdd(newTravelLeg);
         console.log("Travel leg successfully posted to /travel_legs");
+        reset();
       } else {
         console.log("Failed to post to /travel_legs");
       }
