@@ -31,9 +31,10 @@ class TripUserBP(Resource):
         u_id = trip_user_data.get("user_id")
         trip_user = trip_user_schema.load(trip_user_data, session=db.session)
         if TripUser.query.filter(
-            and_(trip_user.trip_id == t_id, trip_user.user_id == u_id)
+            and_(TripUser.trip_id == t_id, TripUser.user_id == u_id)
         ).first():
             return make_response({"error": "User already on Trip"}, 400)
+        db.session.add(trip_user)
         db.session.commit()
         return make_response(trip_user_schema.dump(trip_user), 201)
 

@@ -35,6 +35,7 @@ class UserSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
     name = fields.String(
+        required=True,
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
     email = fields.Email(required=True, error="invalid email address")
@@ -108,7 +109,7 @@ class TripSchema(SQLAlchemyAutoSchema):
     def validate_end_date(self, data, **kwargs):
         start = data.get("start_date")
         end = data.get("end_date")
-        if end < start:
+        if end and start and end < start:
             raise ValidationError("End date must be after start date")
 
 
