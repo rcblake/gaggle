@@ -33,8 +33,7 @@ class TripBP(Resource):
             db.session.commit()
             return make_response(trip_schema.dump(trip), 201)
         except ValidationError as e:
-            error_messages = e.messages
-            return make_response({"errors": error_messages}, 400)
+            return make_response({"errors": e.messages}, 400)
         except Exception as e:
             return make_response(
                 {"error": "An error occurred while processing the request"}, 500

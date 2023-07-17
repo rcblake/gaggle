@@ -53,9 +53,12 @@ export default function App() {
       */}
       <h4>currentUser: {currentUser?.email || null}</h4>
       {currentUser ? (
-        <Link to="/">
-          <button>Home</button>
-        </Link>
+        <>
+          <Link to="/">
+            <button>Home</button>
+          </Link>
+          <button onClick={logout}>Log Out</button>
+        </>
       ) : (
         <>
           <Link to="/login">
@@ -66,8 +69,6 @@ export default function App() {
           </Link>
         </>
       )}
-
-      <button onClick={logout}>Log Out</button>
 
       <Routes>
         <Route
@@ -99,7 +100,10 @@ export default function App() {
           path="/trip_form/:id"
           element={<TripForm currentUser={currentUser} />}
         />
-        <Route path="/" element={<Home currentUser={currentUser} />} />
+        <Route
+          path="/"
+          element={currentUser ? <Home currentUser={currentUser} /> : null}
+        />
       </Routes>
     </>
   );

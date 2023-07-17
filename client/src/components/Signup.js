@@ -60,7 +60,7 @@ export default function Signup({ currentUser, updateCurrentUser }) {
           if (res.ok) {
             res.json().then((data) => {
               updateCurrentUser(data);
-              navigate("/home");
+              navigate("/");
             });
           } else {
             res.json().then((err) => setErrors(err.error));
