@@ -14,13 +14,14 @@ class SignupBP(Resource):
         try:
             data = request.get_json()
 
+            name = data.get("name")
             email = data.get("email")
             password = data.get("password")
 
             if User.query.filter(User.email == email).first():
                 return make_response({"error": "email must be unique"}, 400)
 
-            new_user = User(email=email)
+            new_user = User(email=email, name=name)
             new_user.password_hash = password
 
             db.session.add(new_user)
