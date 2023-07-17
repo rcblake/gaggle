@@ -35,6 +35,7 @@ export default function Signup({ currentUser, updateCurrentUser }) {
   };
 
   const UserSchema = yup.object().shape({
+    name: yup.string().required("name is required"),
     email: yup.string().email().required("email is required"),
     password: yup
       .string()
@@ -90,6 +91,17 @@ export default function Signup({ currentUser, updateCurrentUser }) {
           </Typography>
           <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="name"
+                  label="display name"
+                  name="name"
+                  onChange={formik.handleChange}
+                />
+                <p style={{ color: "red" }}>{formik.errors.name}</p>
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required

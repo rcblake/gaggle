@@ -30,7 +30,32 @@ export default function Trip({ currentUser }) {
       });
   }, [id]);
 
-  const handleEdit = () => {};
+  const handleAttendeeAdd = (newAttendee) =>
+    setTrip((prevState) => {
+      return {
+        ...prevState,
+        users: [
+          ...prevState.users,
+          {
+            user: {
+              email: newAttendee.email,
+              id: newAttendee.id,
+              name: newAttendee.name,
+            },
+          },
+        ],
+      };
+    });
+  const handleTravelLegAdd = (newTravelLeg) =>
+    setTrip((prevState) => {
+      const obj = {
+        ...prevState,
+        travel_legs: [...prevState.travel_legs, newTravelLeg],
+      };
+      console.log(obj);
+      return obj;
+    });
+
   const handleDelete = () => {};
 
   return (
@@ -40,8 +65,12 @@ export default function Trip({ currentUser }) {
       Edit:
       <TripEditForm trip={trip} />
       <button onClick={handleDelete}>Delete Trip</button>
-      <AttendeeContainer trip={trip} currentUser={currentUser} />
-      <Itineraries trip={trip} currentUser={currentUser} />
+      <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
+      <Itineraries
+        trip={trip}
+        currentUser={currentUser}
+        handleTravelLegAdd={handleTravelLegAdd}
+      />
     </>
   );
 }

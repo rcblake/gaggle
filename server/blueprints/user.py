@@ -27,9 +27,6 @@ class UserBP(Resource):
         user_data = request.get_json()
         user = user_schema.load(user_data, session=db.session)
         user.password_hash = user_data["password"]
-        import ipdb
-
-        ipdb.set_trace()
         db.session.add(user)
         db.session.commit()
         return make_response(user_schema.dump(user), 201)
