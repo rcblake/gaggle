@@ -21,13 +21,15 @@ export default function App() {
   //   });
   // }, []);
 
-  useEffect(() => {
-    fetch("users/1").then((res) => {
-      if (res.ok) {
-        res.json().then(setCurrentUser);
-      }
-    });
-  }, []);
+  useEffect(
+    () =>
+      fetch("users/1").then((res) => {
+        if (res.ok) {
+          res.json().then(setCurrentUser);
+        }
+      }),
+    []
+  );
 
   const updateCurrentUser = (updated_user) => {
     setCurrentUser(updated_user);

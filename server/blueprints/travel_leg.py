@@ -26,7 +26,7 @@ class TravelLegBP(Resource):
 
     def post(self):
         travel_leg_data = request.get_json()
-        travel_leg = travel_leg_schema.load(travel_leg_data, session=db.session)
+        travel_leg = travel_leg_schema.load(travel_leg_data)
         db.session.add(travel_leg)
         db.session.commit()
         return make_response(travel_leg_schema.dump(travel_leg), 201)

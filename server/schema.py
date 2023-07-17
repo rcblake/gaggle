@@ -86,7 +86,7 @@ class TripSchema(SQLAlchemyAutoSchema):
             "user.email",
         ),
     )
-    travel_legs = Nested("TravelLegSchema", many=True)
+    travel_legs = Nested("TravelLegSchema", many=True, exclude=("trip",))
     events = Nested("EventSchema", many=True, exclude=("trip",))
     posts = Nested("PostSchema", many=True, exclude=("trip",))
     tasks = Nested("TripTaskSchema", many=True, exclude=("trip",))

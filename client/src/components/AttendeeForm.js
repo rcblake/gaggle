@@ -1,20 +1,21 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export default function AttendeeForm({ trip, handleAttendeeAdd }) {
+export default function AttendeeForm({ trip }) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
     try {
-      const getResponse = await fetch("/users");
+      const getResponse = await fetch("/users?email=" + data.email);
       const users = await getResponse.json();
-      const user = users.find((u) => u.email === data.email);
-      if (user) {
+      debugger;
+      if (users.length > 0) {
+        const user = users[0];
+        debugger;
         const newTripUser = {
           user_id: user.id,
           trip_id: trip.id,
@@ -28,18 +29,12 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
           body: JSON.stringify(newTripUser),
         });
         if (postResponse.ok) {
-          handleAttendeeAdd(user);
-          reset();
           console.log("User data successfully posted to '/trip_users'.");
         } else {
           console.error("Failed to post user data to '/trip_users'.");
-          alert("User already on Trip");
         }
       } else {
-        console.error("User does not exist");
-        alert(
-          "That user is not on Gaggle yet. Invite them to use Gaggle today!"
-        );
+        console.log("User with the provided email does not exist.");
       }
     } catch (error) {
       console.error("An error occurred while processing the request:", error);

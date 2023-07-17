@@ -18,6 +18,7 @@ export default function Trip({ currentUser }) {
         }
       })
       .then((trip) => {
+        console.log(trip);
         // if (trip.users?.includes(currentUser)) {
         setTrip(trip);
         // } else {
@@ -28,43 +29,12 @@ export default function Trip({ currentUser }) {
         console.error(err);
       });
   }, [id]);
-
-  const handleAttendeeAdd = (newAttendee) =>
-    setTrip((prevState) => {
-      return {
-        ...prevState,
-        users: [
-          ...prevState.users,
-          {
-            user: {
-              email: newAttendee.email,
-              id: newAttendee.id,
-              name: newAttendee.name,
-            },
-          },
-        ],
-      };
-    });
-
-  const handleTravelLegAdd = (newTravelLeg) =>
-    setTrip((prevState) => {
-      const obj = {
-        ...prevState,
-        travel_legs: [...prevState.travel_legs, newTravelLeg],
-      };
-      console.log(obj);
-      return obj;
-    });
   return (
     <>
       {/* <TripHeader /> */}
       <h2>Trip:{trip.name}</h2>
-      <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
-      <Itineraries
-        trip={trip}
-        currentUser={currentUser}
-        handleTravelLegAdd={handleTravelLegAdd}
-      />
+      <AttendeeContainer trip={trip} currentUser={currentUser} />
+      <Itineraries trip={trip} currentUser={currentUser} />
     </>
   );
 }
