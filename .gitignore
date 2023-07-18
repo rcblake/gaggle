@@ -49,5 +49,5 @@ jspm_packages
 .env
 
 # pytest cache
-.pytest_cache
-.pyc
+*.pytest_cache
+*.pyc
