@@ -46,12 +46,16 @@ export default function App() {
       }
     });
   };
+
   return (
     <>
       {/* <AppBar />
       
       */}
-      <h4>currentUser: {currentUser?.email || null}</h4>
+      <h4>
+        currentUser: {currentUser?.email || null}
+        {currentUser?.name}
+      </h4>
       {currentUser ? (
         <>
           <Link to="/">

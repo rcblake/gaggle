@@ -7,6 +7,7 @@ export default function TripForm() {
     register,
     handleSubmit,
     getValues,
+    reset,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();

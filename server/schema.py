@@ -68,7 +68,6 @@ class TripSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
     name = fields.String(
-        required=True,
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
     )
     start_date = fields.Date(
