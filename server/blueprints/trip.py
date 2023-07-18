@@ -45,16 +45,18 @@ class TripBP(Resource):
             return make_response("Trip not found", 404)
 
         trip_data = request.get_json()
-        errors = trip_schema.validate(trip_data, partial=True)
-        if errors:
-            return make_response(errors, 400)
-        trip_schema.validate(trip_data, partial=True)
-
-        for field, value in trip_data.items():
-            setattr(trip, field, value)
-        db.session.commit()
-
-        return make_response(trip_schema.dump(trip), 200)
+        try:
+            trip = trip_schema.load(
+                trip_data, instance=trip, partial=True, session=db.session
+            )
+            db.session.commit()
+            return make_response(trip_schema.dump(trip), 200)
+        except ValidationError as e:
+            return make_response({"errors": e.messages}, 400)
+        except Exception as e:
+            return make_response(
+                {"error": "An error occurred while processing the request"}, 500
+            )
 
     def delete(self, trip_id):
         trip = Trip.query.get(trip_id)

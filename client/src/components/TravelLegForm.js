@@ -14,9 +14,6 @@ export default function TravelLegForm({
   } = useForm();
 
   const onSubmit = async (data) => {
-    // const newTravelLeg = {
-
-    // }
     try {
       const newTravelLeg = {
         trip: {
@@ -32,7 +29,6 @@ export default function TravelLegForm({
         flight_number: data.note,
       };
       console.log(newTravelLeg);
-      debugger;
       const postResponse = await fetch("/travel_legs", {
         method: "POST",
         headers: {

@@ -35,7 +35,7 @@ export default function Signup({ currentUser, updateCurrentUser }) {
   };
 
   const UserSchema = yup.object().shape({
-    name: yup.string().required("name is required"),
+    name: yup.string().required("display name is required"),
     email: yup.string().email().required("email is required"),
     password: yup
       .string()
@@ -45,6 +45,7 @@ export default function Signup({ currentUser, updateCurrentUser }) {
 
   const formik = useFormik({
     initialValues: {
+      name: "",
       email: "",
       password: "",
     },

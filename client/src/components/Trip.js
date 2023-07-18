@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
 import { useNavigate, useParams } from "react-router";
 import TripEditForm from "./TripEditForm";
 
-export default function Trip({ currentUser }) {
+export default function Trip() {
   const [trip, setTrip] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
@@ -56,21 +56,37 @@ export default function Trip({ currentUser }) {
       return obj;
     });
 
-  const handleDelete = () => {};
+  const handleTripEdit = () => {
+    fetch(`/trips/${id}`)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Network response was not ok.");
+        }
+      })
+      .then((trip) => {
+        // if (trip.users?.includes(currentUser)) {
+        setTrip(trip);
+        // } else {
+        //   navigate("/404");
+        // }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
+  const handleDelete = () => {};
   return (
     <>
       {/* <TripHeader /> */}
       <h2>Trip:{trip.name}</h2>
       Edit:
-      <TripEditForm trip={trip} />
+      <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
       <button onClick={handleDelete}>Delete Trip</button>
       <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
-      <Itineraries
-        trip={trip}
-        currentUser={currentUser}
-        handleTravelLegAdd={handleTravelLegAdd}
-      />
+      <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
     </>
   );
 }
