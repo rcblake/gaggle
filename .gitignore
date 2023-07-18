@@ -53,3 +53,7 @@ jspm_packages
 *.pyc
 
 app.db
+
+server/__pycache__/
+server/blueprints/__pycache__/
+
