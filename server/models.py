@@ -9,7 +9,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     _password_hash = db.Column(db.String)
     profile_pic = db.Column(db.String, nullable=True)
@@ -62,7 +62,9 @@ class Trip(db.Model):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     lodging = db.relationship("Lodging", back_populates="trip")
-    travel_legs = db.relationship("TravelLeg", back_populates="trip")
+    travel_legs = db.relationship(
+        "TravelLeg", back_populates="trip", passive_deletes=True
+    )
     events = db.relationship("Event", back_populates="trip")
     posts = db.relationship("Post", back_populates="trip")
     tasks = db.relationship("TripTask", back_populates="trip")
@@ -84,7 +86,7 @@ class TripUser(db.Model):
     __tablename__ = "trip_users"
 
     id = db.Column(db.Integer, primary_key=True)
-    trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
+    trip_id = db.Column(db.Integer, db.ForeignKey("trips.id", ondelete="CASCADE"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     is_admin = db.Column(db.Boolean, default=False)
 

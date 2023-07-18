@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, useParams } from "react-router";
+import { UserContext } from "./UserContext";
+import TripEditForm from "./TripEditForm";
 import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
-import { useNavigate, useParams } from "react-router";
-import TripEditForm from "./TripEditForm";
+import TaskContainer from "./TaskContainer";
 
-export default function Trip({ currentUser }) {
+export default function Trip({ updateCurrentUser }) {
   const [trip, setTrip] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
+  const currentUser = useContext(UserContext);
 
   useEffect(() => {
     fetch(`/trips/${id}`)
@@ -56,6 +59,17 @@ export default function Trip({ currentUser }) {
       return obj;
     });
 
+  const handleTripTaskAdd = (newTripTask) =>
+    setTrip((prevState) => {
+      const obj = {
+        ...(prevState = {
+          tasks: [...prevState.tasks, newTripTask],
+        }),
+      };
+      console.log(obj);
+      return obj;
+    });
+
   const handleTripEdit = () => {
     fetch(`/trips/${id}`)
       .then((res) => {
@@ -77,8 +91,19 @@ export default function Trip({ currentUser }) {
       });
   };
 
-  const handleDelete = () => {};
-
+  const handleDelete = () => {
+    fetch(`/trips/${id}`, {
+      method: "DELETE",
+    }).then((res) => {
+      if (res.ok) {
+        alert("Your trip was successfully deleted");
+        updateCurrentUser(currentUser);
+        navigate("/");
+      } else {
+        console.log("trip not deleted");
+      }
+    });
+  };
   return (
     <>
       {/* <TripHeader /> */}
@@ -87,11 +112,8 @@ export default function Trip({ currentUser }) {
       <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
       <button onClick={handleDelete}>Delete Trip</button>
       <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
-      <Itineraries
-        trip={trip}
-        currentUser={currentUser}
-        handleTravelLegAdd={handleTravelLegAdd}
-      />
+      <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
+      <TaskContainer trip={trip} handleTripTaskAdd={handleTripTaskAdd} />
     </>
   );
 }

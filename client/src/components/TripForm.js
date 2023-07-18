@@ -27,6 +27,7 @@ export default function TripForm() {
         const trip = await response.json();
         navigate(`/trips/${trip.id}`);
       } else {
+        console.log(response);
         console.log("Error creating trip");
       }
     } catch (error) {
