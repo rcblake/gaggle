@@ -23,7 +23,6 @@ export default function TaskFrom({ trip, handleTripTaskAdd }) {
         cost: data.cost,
         optional: data.optional,
       };
-      console.log(newTripTask);
       const postResponse = await fetch("/trip_tasks", {
         method: "POST",
         headers: {
