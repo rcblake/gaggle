@@ -27,9 +27,11 @@ class TripTaskBP(Resource):
 
     def post(self):
         trip_task_data = request.get_json()
-
         try:
             trip_task = trip_task_schema.load(trip_task_data, session=db.session)
+            import ipdb
+
+            ipdb.set_trace()
             db.session.add(trip_task)
             db.session.commit()
             return make_response(trip_task_schema.dump(trip_task), 201)

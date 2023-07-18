@@ -26,6 +26,7 @@ from models import (
 )
 
 from datetime import date
+import ipdb
 
 
 class UserSchema(SQLAlchemyAutoSchema):
@@ -142,15 +143,14 @@ class UserTaskSchema(SQLAlchemyAutoSchema):
         load_instance = True
 
         exclude = ("parent_task",)
+        user = Nested("UserSchema", exclude=("tasks",))
 
 
-class UserTaskSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = UserTask
-        include_relationships = True
-        load_instance = True
-
-    user = Nested("UserSchema", exclude=("tasks",))
+# class UserTaskSchema(SQLAlchemyAutoSchema):
+#     class Meta:
+#         model = UserTask
+#         include_relationships = True
+#         load_instance = True
 
 
 class PostSchema(SQLAlchemyAutoSchema):
