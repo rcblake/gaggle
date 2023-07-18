@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Error from "./Error";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -23,7 +22,7 @@ import * as yup from "yup";
 
 const defaultTheme = createTheme();
 
-export default function Signup({ updateCurrentUser }) {
+export default function Signup({ currentUser, updateCurrentUser }) {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -141,7 +140,7 @@ export default function Signup({ updateCurrentUser }) {
                 <p style={{ color: "red" }}>{formik.errors.password}</p>
               </Grid>
             </Grid>
-            {errors ? <Error msg={errors} /> : null}
+
             <Button
               type="submit"
               fullWidth

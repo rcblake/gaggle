@@ -1,9 +1,11 @@
-import { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { UserContext } from "./UserContext";
 
-export default function TravelLegForm({ trip, handleTravelLegAdd }) {
-  const currentUser = useContext(UserContext);
+export default function TravelLegForm({
+  trip,
+  currentUser,
+  handleTravelLegAdd,
+}) {
   const {
     register,
     handleSubmit,

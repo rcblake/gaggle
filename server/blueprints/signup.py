@@ -6,7 +6,6 @@ from schema import UserSchema
 
 
 signup_bp = Blueprint("signup", __name__, url_prefix="/signup")
-user_schema = UserSchema()
 
 
 class SignupBP(Resource):
@@ -19,9 +18,7 @@ class SignupBP(Resource):
             password = data.get("password")
 
             if User.query.filter(User.email == email).first():
-                return make_response(
-                    {"error": "an account under that email already exists"}, 400
-                )
+                return make_response({"error": "email must be unique"}, 400)
 
             new_user = User(email=email, name=name)
             new_user.password_hash = password
@@ -31,6 +28,6 @@ class SignupBP(Resource):
 
             session["user_id"] = new_user.id
 
-            return make_response(user_schema.dump(new_user), 201)
+            return make_response(UserSchema.dump(new_user), 201)
         except Exception as e:
             return make_response({"error": [str(e)]}, 422)

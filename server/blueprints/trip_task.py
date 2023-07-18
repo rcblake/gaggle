@@ -2,7 +2,7 @@ from flask import Blueprint, make_response, request
 from flask_restful import Api, Resource
 from models import TripTask
 from schema import TripTaskSchema
-from config import db, ValidationError
+from config import db
 
 
 trip_task_bp = Blueprint("trip_task", __name__, url_prefix="/trip_tasks")
@@ -27,18 +27,17 @@ class TripTaskBP(Resource):
 
     def post(self):
         trip_task_data = request.get_json()
+        trip_task = trip_task_schema.load(trip_task_data, session=db.session)
+        db.session.add(trip_task)
+        db.session.commit()
+        return make_response(trip_task_schema.dump(trip_task), 201)
 
-        try:
-            trip_task = trip_task_schema.load(trip_task_data, session=db.session)
-            db.session.add(trip_task)
-            db.session.commit()
-            return make_response(trip_task_schema.dump(trip_task), 201)
-        except ValidationError as e:
-            return make_response({"errors": e.messages}, 400)
-        except Exception as e:
-            return make_response(
-                {"error": "An error occurred while processing the request"}, 500
-            )
+    def get(self, trip_task_id):
+        trip_task = TripTask.query.get(trip_task_id)
+        if not trip_task:
+            return make_response("Trip task not found", 404)
+        trip_task = trip_task_schema.dump(trip_task)
+        return make_response(trip_task, 200)
 
     def patch(self, trip_task_id):
         trip_task = TripTask.query.get(trip_task_id)

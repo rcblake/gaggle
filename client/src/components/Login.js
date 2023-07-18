@@ -23,7 +23,7 @@ import Error from "./Error";
 
 const defaultTheme = createTheme();
 
-export default function Login({ updateCurrentUser }) {
+export default function Login({ currentUser, updateCurrentUser }) {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);

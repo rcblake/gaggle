@@ -1,6 +1,5 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { UserContext } from "./UserContext";
 
 import TripForm from "./TripForm";
 import Signup from "./Signup";
@@ -49,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <UserContext.Provider value={currentUser}>
+    <>
       {/* <AppBar />
       
       */}
@@ -78,22 +77,38 @@ export default function App() {
       <Routes>
         <Route
           path="/login"
-          element={<Login updateCurrentUser={updateCurrentUser} />}
+          element={
+            <Login
+              updateCurrentUser={updateCurrentUser}
+              currentUser={currentUser}
+            />
+          }
         />
-        <Route
-          path="/trips/:id"
-          element={<Trip updateCurrentUser={updateCurrentUser} />}
-        />
+        <Route path="/trips/:id" element={<Trip currentUser={currentUser} />} />
         <Route path="/logout" element={<Logout />} />
 
         <Route
           path="/signup"
-          element={<Signup updateCurrentUser={updateCurrentUser} />}
+          element={
+            <Signup
+              updateCurrentUser={updateCurrentUser}
+              currentUser={currentUser}
+            />
+          }
         />
-        <Route path="/trip_form" element={<TripForm />} />
-        <Route path="/trip_form/:id" element={<TripForm />} />
-        <Route path="/" element={currentUser ? <Home /> : null} />
+        <Route
+          path="/trip_form"
+          element={<TripForm currentUser={currentUser} />}
+        />
+        <Route
+          path="/trip_form/:id"
+          element={<TripForm currentUser={currentUser} />}
+        />
+        <Route
+          path="/"
+          element={currentUser ? <Home currentUser={currentUser} /> : null}
+        />
       </Routes>
-    </UserContext.Provider>
+    </>
   );
 }
