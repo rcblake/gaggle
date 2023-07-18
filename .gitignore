@@ -51,3 +51,6 @@ jspm_packages
 # pytest cache
 .pytest_cache
 .pyc
+server/__pycache__/
+server/blueprints/__pycache__/
+
