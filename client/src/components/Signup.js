@@ -22,7 +22,7 @@ import * as yup from "yup";
 
 const defaultTheme = createTheme();
 
-export default function Signup({ currentUser, updateCurrentUser }) {
+export default function Signup({ updateCurrentUser }) {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);

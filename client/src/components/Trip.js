@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
 import { useNavigate, useParams } from "react-router";
 import TripEditForm from "./TripEditForm";
+import { UserContext } from "./UserContext";
 
-export default function Trip({ currentUser }) {
+export default function Trip() {
   const [trip, setTrip] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
+  const currentUser = useContext(UserContext);
 
   useEffect(() => {
     fetch(`/trips/${id}`)
@@ -78,7 +80,6 @@ export default function Trip({ currentUser }) {
   };
 
   const handleDelete = () => {};
-
   return (
     <>
       {/* <TripHeader /> */}
@@ -87,11 +88,7 @@ export default function Trip({ currentUser }) {
       <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
       <button onClick={handleDelete}>Delete Trip</button>
       <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
-      <Itineraries
-        trip={trip}
-        currentUser={currentUser}
-        handleTravelLegAdd={handleTravelLegAdd}
-      />
+      <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
     </>
   );
 }

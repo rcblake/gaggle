@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 import TripForm from "./TripForm";
 import Signup from "./Signup";
@@ -48,7 +49,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <UserContext.Provider value={currentUser}>
       {/* <AppBar />
       
       */}
@@ -109,6 +110,6 @@ export default function App() {
           element={currentUser ? <Home currentUser={currentUser} /> : null}
         />
       </Routes>
-    </>
+    </UserContext.Provider>
   );
 }

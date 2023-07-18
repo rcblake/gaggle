@@ -9,10 +9,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: trip?.name,
-      location: trip?.location,
-      start_date: trip?.start_date,
-      end_date: trip?.end_date,
+      name: trip.name,
     },
   });
 
@@ -32,7 +29,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
         console.log(trip);
         handleTripEdit();
       } else {
-        console.log("Error creating trip");
+        response.json().then((err) => console.log(err.error));
       }
     } catch (error) {
       console.log("Error creating trip", error);
@@ -43,14 +40,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
     <div className="form-dialog">
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Trip Name:</label>
-        <input
-          defaultValue={trip.name}
-          type="text"
-          name="name"
-          {...register("name", {
-            required: "Name is required",
-          })}
-        />
+        <input type="text" name="name" {...register("name", {})} />
         {errors.name && <p className="errorMsg">{errors.name.message}</p>}
         <label>Location:</label>
         <input
@@ -64,9 +54,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
           defaultValue={trip.start_date}
           type="date"
           name="start_date"
-          {...register("start_date", {
-            required: "Start Date is required",
-          })}
+          {...register("start_date", {})}
         />
         {errors.start_date && (
           <p className="errorMsg">{errors.start_date.message}</p>
@@ -76,10 +64,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
           defaultValue={trip.end_date}
           type="date"
           name="end_date"
-          {...register("end_date", {
-            required: "End Date is required",
-            validate: (value) => value > getValues().start_date,
-          })}
+          {...register("end_date", {})}
         />
         {errors.end_date && (
           <p className="errorMsg">{errors.end_date.message}</p>

@@ -3,12 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import MyTrips from "./MyTrips";
 
-export default function Home({ currentUser }) {
+export default function Home() {
   const navigate = useNavigate();
-
-  if (!currentUser) {
-    navigate("/signup");
-  }
 
   const handleAddClick = (e) => {
     const id = e.target.id;
@@ -18,7 +14,7 @@ export default function Home({ currentUser }) {
   return (
     <>
       <button onClick={handleAddClick}>Plan a trip</button>
-      <MyTrips currentUser={currentUser} />
+      <MyTrips />
     </>
   );
 }
