@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Error from "./Error";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -140,7 +141,7 @@ export default function Signup({ updateCurrentUser }) {
                 <p style={{ color: "red" }}>{formik.errors.password}</p>
               </Grid>
             </Grid>
-
+            {errors ? <Error msg={errors} /> : null}
             <Button
               type="submit"
               fullWidth

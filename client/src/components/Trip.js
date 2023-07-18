@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate, useParams } from "react-router";
+import { UserContext } from "./UserContext";
+import TripEditForm from "./TripEditForm";
 import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
-import { useNavigate, useParams } from "react-router";
-import TripEditForm from "./TripEditForm";
-import { UserContext } from "./UserContext";
+import TaskContainer from "./TaskContainer";
 
-export default function Trip() {
+export default function Trip({ updateCurrentUser }) {
   const [trip, setTrip] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
@@ -58,6 +59,17 @@ export default function Trip() {
       return obj;
     });
 
+  const handleTripTaskAdd = (newTripTask) =>
+    setTrip((prevState) => {
+      const obj = {
+        ...(prevState = {
+          tasks: [...prevState.tasks, newTripTask],
+        }),
+      };
+      console.log(obj);
+      return obj;
+    });
+
   const handleTripEdit = () => {
     fetch(`/trips/${id}`)
       .then((res) => {
@@ -79,7 +91,19 @@ export default function Trip() {
       });
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    fetch(`/trips/${id}`, {
+      method: "DELETE",
+    }).then((res) => {
+      if (res.ok) {
+        alert("Your trip was successfully deleted");
+        updateCurrentUser(currentUser);
+        navigate("/");
+      } else {
+        console.log("trip not deleted");
+      }
+    });
+  };
   return (
     <>
       {/* <TripHeader /> */}
@@ -89,6 +113,7 @@ export default function Trip() {
       <button onClick={handleDelete}>Delete Trip</button>
       <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
       <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
+      <TaskContainer trip={trip} handleTripTaskAdd={handleTripTaskAdd} />
     </>
   );
 }

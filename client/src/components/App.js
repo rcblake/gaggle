@@ -78,37 +78,21 @@ export default function App() {
       <Routes>
         <Route
           path="/login"
-          element={
-            <Login
-              updateCurrentUser={updateCurrentUser}
-              currentUser={currentUser}
-            />
-          }
+          element={<Login updateCurrentUser={updateCurrentUser} />}
         />
-        <Route path="/trips/:id" element={<Trip currentUser={currentUser} />} />
+        <Route
+          path="/trips/:id"
+          element={<Trip updateCurrentUser={updateCurrentUser} />}
+        />
         <Route path="/logout" element={<Logout />} />
 
         <Route
           path="/signup"
-          element={
-            <Signup
-              updateCurrentUser={updateCurrentUser}
-              currentUser={currentUser}
-            />
-          }
+          element={<Signup updateCurrentUser={updateCurrentUser} />}
         />
-        <Route
-          path="/trip_form"
-          element={<TripForm currentUser={currentUser} />}
-        />
-        <Route
-          path="/trip_form/:id"
-          element={<TripForm currentUser={currentUser} />}
-        />
-        <Route
-          path="/"
-          element={currentUser ? <Home currentUser={currentUser} /> : null}
-        />
+        <Route path="/trip_form" element={<TripForm />} />
+        <Route path="/trip_form/:id" element={<TripForm />} />
+        <Route path="/" element={currentUser ? <Home /> : null} />
       </Routes>
     </UserContext.Provider>
   );
