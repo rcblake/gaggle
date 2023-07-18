@@ -1,9 +1,7 @@
-import { useContext } from "react";
+import React from "react";
 import TripCard from "./TripCard";
-import { UserContext } from "./UserContext";
 
-export default function MyTrips() {
-  const currentUser = useContext(UserContext);
+export default function MyTrips({ currentUser }) {
   const trips = currentUser?.trips;
 
   return (

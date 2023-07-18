@@ -93,7 +93,7 @@ class TripSchema(SQLAlchemyAutoSchema):
     travel_legs = Nested("TravelLegSchema", many=True)
     events = Nested("EventSchema", many=True, exclude=("trip",))
     posts = Nested("PostSchema", many=True, exclude=("trip",))
-    tasks = Nested("TripTaskSchema", many=True)
+    tasks = Nested("TripTaskSchema", many=True, exclude=("trip",))
     admins = Nested(
         "UserSchema",
         many=True,
@@ -135,65 +135,65 @@ class TripTaskSchema(SQLAlchemyAutoSchema):
     trip = Nested("TripSchema", only=("trip.id",))
 
 
-# class UserTaskSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = UserTask
-#         include_relationships = True
-#         load_instance = True
+class UserTaskSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = UserTask
+        include_relationships = True
+        load_instance = True
 
-#         exclude = ("parent_task",)
-
-
-# class UserTaskSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = UserTask
-#         include_relationships = True
-#         load_instance = True
-
-#     user = Nested("UserSchema", exclude=("tasks",))
+        exclude = ("parent_task",)
 
 
-# class PostSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = Post
-#         include_relationships = True
-#         load_instance = True
+class UserTaskSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = UserTask
+        include_relationships = True
+        load_instance = True
 
-#     trip = Nested("TripSchema", only=("id",))
-#     user = Nested("UserSchema", only=("id", "name"))
-#     comments = Nested("CommentSchema", many=True, exclude=("post",))
-#     post_likes = Nested("PostLikeSchema", many=True, exclude=("post",))
+    user = Nested("UserSchema", exclude=("tasks",))
 
 
-# class CommentSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = Comment
-#         include_relationships = True
-#         load_instance = True
+class PostSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Post
+        include_relationships = True
+        load_instance = True
 
-#     post = Nested("PostSchema", exclude=("comments",))
-#     user = Nested("UserSchema", only=("id", "name"))
-#     comment_likes = Nested("CommentLikeSchema", many=True, exclude=("comment",))
-
-
-# class PostLikeSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = PostLike
-#         include_relationships = True
-#         load_instance = True
-
-#     post = Nested("PostSchema", exclude=("post_likes",))
-#     user = Nested("UserSchema", only=("id", "name"))
+    trip = Nested("TripSchema", only=("id",))
+    user = Nested("UserSchema", only=("id", "name"))
+    comments = Nested("CommentSchema", many=True, exclude=("post",))
+    post_likes = Nested("PostLikeSchema", many=True, exclude=("post",))
 
 
-# class CommentLikeSchema(SQLAlchemyAutoSchema):
-#     class Meta:
-#         model = CommentLike
-#         include_relationships = True
-#         load_instance = True
+class CommentSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Comment
+        include_relationships = True
+        load_instance = True
 
-#     comment = Nested("CommentSchema", exclude=("comment_likes",))
-#     user = Nested("UserSchema", only=("id", "name"))
+    post = Nested("PostSchema", exclude=("comments",))
+    user = Nested("UserSchema", only=("id", "name"))
+    comment_likes = Nested("CommentLikeSchema", many=True, exclude=("comment",))
+
+
+class PostLikeSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = PostLike
+        include_relationships = True
+        load_instance = True
+
+    post = Nested("PostSchema", exclude=("post_likes",))
+    user = Nested("UserSchema", only=("id", "name"))
+
+
+class CommentLikeSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = CommentLike
+        include_relationships = True
+        load_instance = True
+
+    comment = Nested("CommentSchema", exclude=("comment_likes",))
+    user = Nested("UserSchema", only=("id", "name"))
 
 
 class EventSchema(SQLAlchemyAutoSchema):
