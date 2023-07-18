@@ -3,6 +3,7 @@ import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
 import { useNavigate, useParams } from "react-router";
 import TripEditForm from "./TripEditForm";
+import { UserContext } from "./UserContext";
 
 export default function Trip() {
   const [trip, setTrip] = useState({});
