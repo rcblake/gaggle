@@ -131,6 +131,7 @@ class TripTaskSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = TripTask
         include_relationships = True
+        load_instance = True
         exclude = ("child_tasks",)
 
     trip = Nested("TripSchema", only=("trip.id",))

@@ -24,9 +24,20 @@ import os
 
 
 # Local imports
-
 # Instantiate app, set attributes
-app = Flask(__name__)
+
+app = Flask(
+    __name__,
+    static_url_path="",
+    static_folder="../client/build",
+    template_folder="../client/build",
+)
+
+# def register_routes():
+#     @app.route("/")
+#     @app.route("/<int:id>")
+
+
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
