@@ -7,11 +7,6 @@ from models import (
     Trip,
     TripUser,
     TripTask,
-    UserTask,
-    Post,
-    Comment,
-    PostLike,
-    CommentLike,
     Event,
     TravelLeg,
     Lodging,
@@ -24,11 +19,8 @@ def create_fake_user():
     name = fake.name()
     email = fake.email()
     _password_hash = fake.password()
-    profile_pic = fake.image_url()
 
-    user = User(
-        name=name, email=email, _password_hash=_password_hash, profile_pic=profile_pic
-    )
+    user = User(name=name, email=email, _password_hash=_password_hash)
     db.session.add(user)
     db.session.commit()
 
@@ -40,7 +32,6 @@ def create_fake_trip():
     start_date = fake.date_time_this_year()
     end_date = start_date + timedelta(days=7)
     location = fake.city()
-    lodging = fake.word()
 
     trip = Trip(
         name=name,
@@ -55,16 +46,14 @@ def create_fake_trip():
 
 
 def create_fake_trip_user(trip, user):
-    is_admin = fake.boolean()
-
-    trip_user = TripUser(trip=trip, user=user, is_admin=is_admin)
+    trip_user = TripUser(trip=trip, user=user)
     db.session.add(trip_user)
     db.session.commit()
 
     return trip_user
 
 
-def create_fake_trip_task(trip):
+def create_fake_task(trip):
     title = fake.sentence()
     note = fake.paragraph()
     link = fake.url()
@@ -85,63 +74,6 @@ def create_fake_trip_task(trip):
     db.session.commit()
 
     return trip_task
-
-
-def create_fake_user_task(trip_task):
-    title = fake.sentence()
-    note = fake.paragraph()
-    link = fake.url()
-    cost = fake.pyfloat()
-    optional = fake.boolean()
-
-    user_task = UserTask(
-        parent_task=trip_task,
-        title=title,
-        note=note,
-        link=link,
-        cost=cost,
-        optional=optional,
-    )
-    db.session.add(user_task)
-    db.session.commit()
-
-    return user_task
-
-
-def create_fake_post(trip, user):
-    content = fake.paragraph()
-
-    post = Post(trip=trip, user=user, content=content)
-    db.session.add(post)
-    db.session.commit()
-
-    return post
-
-
-def create_fake_comment(post, user):
-    content = fake.paragraph()
-
-    comment = Comment(post=post, user=user, content=content)
-    db.session.add(comment)
-    db.session.commit()
-
-    return comment
-
-
-def create_fake_post_like(post, user):
-    post_like = PostLike(post=post, user=user)
-    db.session.add(post_like)
-    db.session.commit()
-
-    return post_like
-
-
-def create_fake_comment_like(comment, user):
-    comment_like = CommentLike(comment=comment, user=user)
-    db.session.add(comment_like)
-    db.session.commit()
-
-    return comment_like
 
 
 def create_fake_event(trip):
@@ -207,11 +139,6 @@ if __name__ == "__main__":
         Trip.query.delete()
         TripUser.query.delete()
         TripTask.query.delete()
-        UserTask.query.delete()
-        Post.query.delete()
-        Comment.query.delete()
-        PostLike.query.delete()
-        CommentLike.query.delete()
         Event.query.delete()
         TravelLeg.query.delete()
         Lodging.query.delete()
@@ -228,35 +155,7 @@ if __name__ == "__main__":
 
         # Create fake trip tasks
         for _ in range(3):
-            trip_task = create_fake_trip_task(trip)
-
-            # Create fake user tasks for each trip task
-            for _ in range(10):
-                create_fake_user_task(trip_task)
-
-        # Create fake posts
-        for user in users:
-            create_fake_post(trip, user)
-
-        # Create fake comments
-        posts = Post.query.filter_by(trip_id=trip.id).all()
-        for post in posts:
-            for _ in range(2):
-                create_fake_comment(post, users[fake.random_int(0, len(users) - 1)])
-
-        # Create fake post likes
-        posts = Post.query.filter_by(trip_id=trip.id).all()
-        for post in posts:
-            for _ in range(fake.random_int(0, len(users) // 2)):
-                create_fake_post_like(post, users[fake.random_int(0, len(users) - 1)])
-
-        # Create fake comment likes
-        comments = Comment.query.join(Post).filter(Post.trip_id == trip.id).all()
-        for comment in comments:
-            for _ in range(fake.random_int(0, len(users) // 2)):
-                create_fake_comment_like(
-                    comment, users[fake.random_int(0, len(users) - 1)]
-                )
+            task = create_fake_task(trip)
 
         # Create fake events
         for _ in range(3):
