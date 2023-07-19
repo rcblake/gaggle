@@ -6,7 +6,7 @@ from models import (
     User,
     Trip,
     TripUser,
-    TripTask,
+    Task,
     Event,
     TravelLeg,
     Lodging,
@@ -61,7 +61,7 @@ def create_fake_task(trip):
     optional = fake.boolean()
     everyone = fake.boolean()
 
-    trip_task = TripTask(
+    task = Task(
         trip=trip,
         title=title,
         note=note,
@@ -70,10 +70,10 @@ def create_fake_task(trip):
         optional=optional,
         everyone=everyone,
     )
-    db.session.add(trip_task)
+    db.session.add(task)
     db.session.commit()
 
-    return trip_task
+    return task
 
 
 def create_fake_event(trip):
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         User.query.delete()
         Trip.query.delete()
         TripUser.query.delete()
-        TripTask.query.delete()
+        Task.query.delete()
         Event.query.delete()
         TravelLeg.query.delete()
         Lodging.query.delete()

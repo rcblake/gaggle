@@ -51,7 +51,7 @@ class Trip(db.Model):
         "TravelLeg", back_populates="trip", passive_deletes=True
     )
     events = db.relationship("Event", back_populates="trip")
-    tasks = db.relationship("TripTask", back_populates="trip")
+    tasks = db.relationship("Task", back_populates="trip")
 
     users = db.relationship("TripUser", back_populates="trip")
 
@@ -71,8 +71,8 @@ class TripUser(db.Model):
 
 
 # needs: owner currently commented out, nullables, repr
-class TripTask(db.Model):
-    __tablename__ = "trip_tasks"
+class Task(db.Model):
+    __tablename__ = "tasks"
 
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))

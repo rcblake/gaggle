@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { UserContext } from "./UserContext";
 
-export default function TaskFrom({ trip, handleTripTaskAdd }) {
+export default function TaskFrom({ trip, handleTaskAdd }) {
   const currentUser = useContext(UserContext);
   const {
     register,
@@ -13,23 +13,23 @@ export default function TaskFrom({ trip, handleTripTaskAdd }) {
 
   const onSubmit = async (data) => {
     try {
-      const newTripTask = {
+      const newTask = {
         title: data.title,
         note: data.note,
         link: data.link,
         cost: data.cost,
         optional: data.optional,
       };
-      console.log(newTripTask);
-      const postResponse = await fetch("/trip_tasks", {
+      console.log(newTask);
+      const postResponse = await fetch("/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newTripTask),
+        body: JSON.stringify(newTask),
       });
       if (postResponse.ok) {
-        handleTripTaskAdd(newTripTask);
+        handleTaskAdd(newTask);
         console.log("Task added to trip tasks");
         reset();
       } else {

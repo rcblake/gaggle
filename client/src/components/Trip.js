@@ -59,11 +59,11 @@ export default function Trip({ updateCurrentUser }) {
       return obj;
     });
 
-  const handleTripTaskAdd = (newTripTask) =>
+  const handleTaskAdd = (newTask) =>
     setTrip((prevState) => {
       const obj = {
         ...(prevState = {
-          tasks: [...prevState.tasks, newTripTask],
+          tasks: [...prevState.tasks, newTask],
         }),
       };
       console.log(obj);
@@ -113,7 +113,7 @@ export default function Trip({ updateCurrentUser }) {
       <button onClick={handleDelete}>Delete Trip</button>
       <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
       <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
-      <TaskContainer trip={trip} handleTripTaskAdd={handleTripTaskAdd} />
+      <TaskContainer trip={trip} handleTaskAdd={handleTaskAdd} />
     </>
   );
 }
