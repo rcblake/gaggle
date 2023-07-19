@@ -16,7 +16,6 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    tasks = db.relationship("UserTask", back_populates="user")
     travel_legs = db.relationship("TravelLeg", back_populates="user")
 
     trips = db.relationship("TripUser", back_populates="user")

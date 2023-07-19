@@ -14,12 +14,7 @@ from models import (
     User,
     Trip,
     TripUser,
-    TripTask,
-    UserTask,
-    Post,
-    Comment,
-    PostLike,
-    CommentLike,
+    Task,
     Event,
     TravelLeg,
     Lodging,
@@ -98,7 +93,7 @@ class TripSchema(SQLAlchemyAutoSchema):
         ),
     )
     travel_legs = Nested("TravelLegSchema", many=True)
-    tasks = Nested("TripTaskSchema", many=True)
+    tasks = Nested("TaskSchema", many=True)
     events = Nested("EventSchema", many=True)
 
     @validates_schema
@@ -123,11 +118,10 @@ class TripUserSchema(SQLAlchemyAutoSchema):
     trip = Nested("TripSchema", exclude=("users",))
 
 
-class TripTaskSchema(SQLAlchemyAutoSchema):
+class TaskSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = TripTask
+        model = Task
         include_relationships = True
-        exclude = ("child_tasks",)
 
     trip = Nested("TripSchema", only=("id",))
 
