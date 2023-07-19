@@ -20,9 +20,11 @@ from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, SQLAlchemyAutoSchema
 from dotenv import load_dotenv
 from os import environ
+import os
 
 
 # Local imports
+
 
 # Instantiate app, set attributes
 app = Flask(__name__)
@@ -45,9 +47,13 @@ db.init_app(app)
 
 # Instantiate REST API
 api = Api(app)
+api_map = os.getenv("mapAPI")
+
 
 # Instantiate CORS
 CORS(app)
 
 bcrypt = Bcrypt(app)
 ma = Marshmallow(app)
+
+#

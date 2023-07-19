@@ -1,9 +1,7 @@
-import { useContext } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { UserContext } from "./UserContext";
 
 export default function TaskFrom({ trip, handleTaskAdd }) {
-  const currentUser = useContext(UserContext);
   const {
     register,
     handleSubmit,
@@ -14,11 +12,15 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
   const onSubmit = async (data) => {
     try {
       const newTask = {
+        trip: {
+          id: trip.id,
+        },
         title: data.title,
         note: data.note,
         link: data.link,
         cost: data.cost,
         optional: data.optional,
+        everyone: data.everyone,
       };
       console.log(newTask);
       const postResponse = await fetch("/tasks", {
@@ -66,6 +68,11 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
         <input
           type="checkbox"
           name="optional"
+          {...register("optional", { defaultChecked: true })}
+        />
+        <input
+          type="checkbox"
+          name="everyone"
           {...register("optional", { defaultChecked: false })}
         />
         <input type="submit" />

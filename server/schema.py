@@ -122,6 +122,7 @@ class TaskSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Task
         include_relationships = True
+        load_instance = True
 
     trip = Nested("TripSchema", only=("id",))
 

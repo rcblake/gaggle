@@ -6,7 +6,6 @@ from config import db, ValidationError
 
 
 task_bp = Blueprint("task", __name__, url_prefix="/tasks")
-api = Api(task_bp)
 
 tasks_schema = TaskSchema(many=True)
 task_schema = TaskSchema()
@@ -27,17 +26,28 @@ class TaskBP(Resource):
 
     def post(self):
         task_data = request.get_json()
-        try:
-            task = task_schema.load(task_data, session=db.session)
+        task = task_schema.load(task_data, session=db.session)
+
+        if isinstance(task, Task):
             db.session.add(task)
             db.session.commit()
             return make_response(task_schema.dump(task), 201)
-        except ValidationError as e:
-            return make_response({"errors": e.messages}, 400)
-        except Exception as e:
-            return make_response(
-                {"error": "An error occurred while processing the request"}, 500
-            )
+        else:
+            return make_response("failurreeee", 4000)
+
+    # def post(self):
+    #     task_data = request.get_json()
+    #     try:
+    #         task = task_schema.load(task_data, session=db.session)
+    #         db.session.add(task)
+    #         db.session.commit()
+    #         return make_response(task_schema.dump(task), 201)
+    #     except ValidationError as e:
+    #         return make_response({"errors": e.messages}, 400)
+    #     except Exception as e:
+    #         return make_response(
+    #             {"error": "An error occurred while processing the request"}, 500
+    #         )
 
     def patch(self, task_id):
         task = Task.query.get(task_id)

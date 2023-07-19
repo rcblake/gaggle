@@ -16,7 +16,9 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    travel_legs = db.relationship("TravelLeg", back_populates="user")
+    travel_legs = db.relationship(
+        "TravelLeg", back_populates="user", cascade="all, delete-orphan"
+    )
 
     trips = db.relationship("TripUser", back_populates="user")
 
@@ -40,18 +42,22 @@ class Trip(db.Model):
 
     name = db.Column(db.String, nullable=False)
     start_date = db.Column(db.Date, nullable=False)
-    end_date = db.Column(db.Date)
+    end_date = db.Column(db.Date, nullable=False)
     location = db.Column(db.String, nullable=False)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    lodging = db.relationship("Lodging", back_populates="trip")
-    travel_legs = db.relationship(
-        "TravelLeg", back_populates="trip", passive_deletes=True
+    lodging = db.relationship(
+        "Lodging", back_populates="trip", cascade="all, delete-orphan"
     )
-    events = db.relationship("Event", back_populates="trip")
-    tasks = db.relationship("Task", back_populates="trip")
+    travel_legs = db.relationship(
+        "TravelLeg", back_populates="trip", cascade="all, delete-orphan"
+    )
+    events = db.relationship(
+        "Event", back_populates="trip", cascade="all, delete-orphan"
+    )
+    tasks = db.relationship("Task", back_populates="trip", cascade="all, delete-orphan")
 
     users = db.relationship("TripUser", back_populates="trip")
 
@@ -60,7 +66,7 @@ class TripUser(db.Model):
     __tablename__ = "trip_users"
 
     id = db.Column(db.Integer, primary_key=True)
-    trip_id = db.Column(db.Integer, db.ForeignKey("trips.id", ondelete="CASCADE"))
+    trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -80,8 +86,8 @@ class Task(db.Model):
     note = db.Column(db.String, nullable=False)
     link = db.Column(db.String)
     cost = db.Column(db.Float)
-    optional = db.Column(db.Boolean, default=True)
-    everyone = db.Column(db.Boolean, default=False)
+    optional = db.Column(db.Boolean, default=False)
+    everyone = db.Column(db.Boolean, default=True)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
