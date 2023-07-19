@@ -34,14 +34,6 @@ app = Flask(
 )
 
 
-def register_routes():
-    @app.route("/")
-    @app.route("/login")
-    @app.route("/trips/<int:id>")
-    def index(id=0):
-        return render_template("index.html")
-
-
 load_dotenv()
 
 

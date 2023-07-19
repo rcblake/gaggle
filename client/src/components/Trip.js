@@ -13,7 +13,7 @@ export default function Trip({ updateCurrentUser }) {
   const currentUser = useContext(UserContext);
 
   useEffect(() => {
-    fetch(`/trips/${id}`)
+    fetch(`api/trips/${id}`)
       .then((res) => {
         if (res.ok) {
           return res.json();

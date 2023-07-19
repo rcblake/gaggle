@@ -6,7 +6,7 @@
 from flask_restful import Resource
 
 # Local imports
-from config import app, api
+from config import app, api, render_template
 
 from blueprints.user import UserBP, user_bp
 from blueprints.trip import TripBP, trip_bp
@@ -63,6 +63,13 @@ api.add_resource(LogoutBP, "/logout")
 
 
 # Views go here!
+def register_routes():
+    @app.route("/")
+    @app.route("/login")
+    @app.route("/trips/<int:id>")
+    def index(id=0):
+        return render_template("index.html")
+
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
