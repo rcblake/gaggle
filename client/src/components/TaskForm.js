@@ -14,9 +14,6 @@ export default function TaskFrom({ trip, handleTripTaskAdd }) {
   const onSubmit = async (data) => {
     try {
       const newTripTask = {
-        trip: {
-          id: trip.id,
-        },
         title: data.title,
         note: data.note,
         link: data.link,

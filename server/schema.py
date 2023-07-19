@@ -34,6 +34,7 @@ class UserSchema(SQLAlchemyAutoSchema):
         model = User
         include_relationships = True
         load_instance = True
+        fields = ("id", "name", "email", "trips", "travel_legs")
 
     name = fields.String(
         required=True,
@@ -67,6 +68,17 @@ class TripSchema(SQLAlchemyAutoSchema):
         model = Trip
         include_relationships = True
         load_instance = True
+        fields = (
+            "id",
+            "name",
+            "location",
+            "start_date",
+            "end_date",
+            "lodging",
+            "users",
+            "travel_legs",
+            "tasks",
+        )
 
     name = fields.String(
         validate=validate.Length(max=20, error="Name must be less than 20 characters"),
@@ -94,7 +106,7 @@ class TripSchema(SQLAlchemyAutoSchema):
     travel_legs = Nested("TravelLegSchema", many=True)
     events = Nested("EventSchema", many=True, exclude=("trip",))
     posts = Nested("PostSchema", many=True, exclude=("trip",))
-    tasks = Nested("TripTaskSchema", many=True, exclude=("trip",))
+    trip_tasks = Nested("TripTaskSchema", many=True, exclude=("trip",))
     admins = Nested(
         "UserSchema",
         many=True,
@@ -133,7 +145,7 @@ class TripTaskSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         exclude = ("child_tasks",)
 
-    trip = Nested("TripSchema", only=("trip.id",))
+    trip = Nested("TripSchema", only=("id",))
 
 
 class UserTaskSchema(SQLAlchemyAutoSchema):
