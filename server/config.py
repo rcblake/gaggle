@@ -1,7 +1,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -33,16 +33,23 @@ app = Flask(
     template_folder="../client/build",
 )
 
-# def register_routes():
-#     @app.route("/")
-#     @app.route("/<int:id>")
+
+def register_routes():
+    @app.route("/")
+    @app.route("/login")
+    @app.route("/trips/<int:id>")
+    def index(id=0):
+        return render_template("index.html")
+
+
+load_dotenv()
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
+app.debug = True
 
-load_dotenv(".env")
 app.secret_key = environ.get("SECRET_KEY")
 
 # Define metadata, instantiate db
