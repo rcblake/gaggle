@@ -47,7 +47,7 @@ export default function Login({ updateCurrentUser }) {
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      fetch("api/login", {
+      fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

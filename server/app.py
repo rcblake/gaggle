@@ -63,12 +63,12 @@ api.add_resource(LogoutBP, "/logout")
 
 
 # Views go here!
-def register_routes():
-    @app.route("/")
-    @app.route("/login")
-    @app.route("/trips/<int:id>")
-    def index(id=0):
-        return render_template("index.html")
+@app.route("/")
+@app.route("/login")
+@app.route("/signup")
+@app.route("/trips/<int:id>")
+def index(id=0):
+    return render_template("index.html")
 
 
 if __name__ == "__main__":

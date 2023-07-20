@@ -3,7 +3,7 @@ from flask_restful import Resource
 from models import User
 from schema import UserSchema
 
-login_bp = Blueprint("login", __name__, url_prefix="api/login")
+login_bp = Blueprint("login", __name__, url_prefix="/login")
 user_schema = UserSchema()
 
 
