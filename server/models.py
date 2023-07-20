@@ -95,10 +95,7 @@ class Task(db.Model):
     trip = db.relationship("Trip", back_populates="tasks")
 
 
-# needs: everything
 
-
-# needs: everything
 class Event(db.Model):
     __tablename__ = "events"
 
