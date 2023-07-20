@@ -1,13 +1,28 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
+
+export const dirtyValues = (dirtyFields, allValues) => {
+  if (dirtyFields === true || Array.isArray(dirtyFields)) {
+    return allValues;
+  }
+
+  return Object.fromEntries(
+    Object.keys(dirtyFields).map((key) => [
+      key,
+      dirtyValues(dirtyFields[key], allValues[key]),
+    ])
+  );
+};
 
 export default function TripEditForm({ trip, handleTripEdit }) {
   const {
     register,
     handleSubmit,
+    formState,
     getValues,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: trip?.name,
       location: trip?.location,
@@ -18,13 +33,14 @@ export default function TripEditForm({ trip, handleTripEdit }) {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      console.log(dirtyValues(formState.dirtyFields, data));
+      const tripEdit = dirtyValues(formState.dirtyFields, data);
       const response = await fetch(`/trips/${trip.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(tripEdit),
       });
 
       if (response.ok) {
@@ -47,9 +63,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
           defaultValue={trip.name}
           type="text"
           name="name"
-          {...register("name", {
-            required: "Name is required",
-          })}
+          {...register("name", {})}
         />
         {errors.name && <p className="errorMsg">{errors.name.message}</p>}
         <label>Location:</label>
@@ -64,9 +78,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
           defaultValue={trip.start_date}
           type="date"
           name="start_date"
-          {...register("start_date", {
-            required: "Start Date is required",
-          })}
+          {...register("start_date", {})}
         />
         {errors.start_date && (
           <p className="errorMsg">{errors.start_date.message}</p>
@@ -77,7 +89,6 @@ export default function TripEditForm({ trip, handleTripEdit }) {
           type="date"
           name="end_date"
           {...register("end_date", {
-            required: "End Date is required",
             validate: (value) => value > getValues().start_date,
           })}
         />

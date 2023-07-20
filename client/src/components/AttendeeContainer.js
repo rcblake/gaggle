@@ -1,12 +1,15 @@
 import React from "react";
 import AttendeeForm from "./AttendeeForm";
+import { Typography } from "@mui/material";
 
 export default function AttendeeContainer({ trip, handleAttendeeAdd }) {
   return (
     <>
-      <h4>attendees:</h4>
+      <Typography variant="h4">attendees:</Typography>
       {trip.users?.map((user) => (
-        <p key={user.user.id}>{user.user.email}</p>
+        <Typography variant="h6" key={user.user.id}>
+          {user.user.email}
+        </Typography>
       ))}
       <AttendeeForm trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
     </>
