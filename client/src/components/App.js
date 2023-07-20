@@ -91,7 +91,6 @@ export default function App() {
           element={<Signup updateCurrentUser={updateCurrentUser} />}
         />
         <Route path="/trip_form" element={<TripForm />} />
-        <Route path="/trip_form/:id" element={<TripForm />} />
         <Route path="/" element={currentUser ? <Home /> : null} />
       </Routes>
     </UserContext.Provider>

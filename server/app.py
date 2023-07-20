@@ -63,10 +63,11 @@ api.add_resource(LogoutBP, "/logout")
 
 
 # Views go here!
-@app.route("/")
 @app.route("/login")
 @app.route("/signup")
+@app.route("/logout")
 @app.route("/trips/<int:id>")
+@app.route("trip_form")
 def index(id=0):
     return render_template("index.html")
 
