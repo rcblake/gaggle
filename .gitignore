@@ -61,3 +61,4 @@ server/blueprints/__pycache__/
 API.js
 
 
+server/.env
