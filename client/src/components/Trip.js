@@ -61,6 +61,7 @@ export default function Trip({ updateCurrentUser }) {
 
   const handleTaskAdd = (newTask) =>
     setTrip((prevState) => {
+      debugger;
       const obj = {
         ...(prevState = {
           tasks: [...prevState.tasks, newTask],

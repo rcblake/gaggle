@@ -104,6 +104,10 @@ class TripSchema(SQLAlchemyAutoSchema):
             raise ValidationError("End date must be after start date")
 
 
+class TripEditSchema(Schema):
+    nam = fields.String(max=20)
+
+
 class TripUserSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = TripUser
@@ -124,7 +128,7 @@ class TaskSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
-    cost = fields.Float(required=False)
+    cost = fields.Float(required=False, allow_none=True)
 
     trip = Nested("TripSchema", only=("id",))
 

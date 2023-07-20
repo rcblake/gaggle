@@ -10,6 +10,7 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
   } = useForm();
 
   const onSubmit = async (data) => {
+    const costValue = parseFloat(data.cost);
     try {
       const newTask = {
         trip: {
@@ -18,9 +19,9 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
         title: data.title,
         note: data.note,
         link: data.link,
-        cost: data.cost,
+        cost: costValue,
         optional: data.optional,
-        everyone: data.everyone,
+        // everyone: data.everyone,
       };
       console.log(newTask);
       const postResponse = await fetch("/tasks", {
@@ -31,7 +32,7 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
         body: JSON.stringify(newTask),
       });
       if (postResponse.ok) {
-        postResponse.json().then(handleTaskAdd());
+        postResponse.json().then(handleTaskAdd(newTask));
         console.log("Task added to trip tasks");
         reset();
       } else {
@@ -70,11 +71,12 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
           name="optional"
           {...register("optional", { defaultChecked: true })}
         />
+        {/* <label>Everyone?</label>
         <input
           type="checkbox"
           name="everyone"
           {...register("optional", { defaultChecked: false })}
-        />
+        /> */}
         <input type="submit" />
       </form>
     </div>
