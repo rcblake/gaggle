@@ -18,7 +18,7 @@ from marshmallow import (
 )
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, SQLAlchemyAutoSchema
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from os import environ
 import os
 
@@ -35,7 +35,8 @@ app = Flask(
 )
 
 
-load_dotenv()
+load_dotenv(find_dotenv())
+print("RIGHT HERE" + os.environ.get("DATABASE_URI"))
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
