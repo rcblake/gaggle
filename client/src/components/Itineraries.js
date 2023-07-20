@@ -3,7 +3,7 @@ import createData from "react";
 import TravelLegForm from "./TravelLegForm";
 import TravelLeg from "./TravelLeg";
 
-import { TableFooter, Typography } from "@mui/material";
+import { TableFooter, Typography, Box } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -45,6 +45,10 @@ export default function Itineraries({ trip, handleTravelLegAdd }) {
   );
   return (
     <TableContainer component={Paper}>
+      <Box display="flex" flexDirection="row" alignItems={"center"}>
+        <Typography variant="h4">tasks</Typography>
+        <TravelLegForm trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
+      </Box>
       <Table aria-label="itinerary table">
         <TableHead>
           <TableRow>

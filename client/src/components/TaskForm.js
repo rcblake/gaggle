@@ -12,6 +12,9 @@ import {
   DialogTitle,
   FormGroup,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function TaskFrom({ trip, handleTaskAdd }) {
   const [open, setOpen] = useState(false);
@@ -67,9 +70,11 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Add a Task
-      </Button>
+      <Tooltip title="Add" onClick={handleClickOpen}>
+        <IconButton>
+          <AddIcon /> New Task
+        </IconButton>
+      </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Task</DialogTitle>
         <DialogContent component="form">

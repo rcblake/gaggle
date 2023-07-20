@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { UserContext } from "./UserContext";
 
 import {
+  Box,
   Checkbox,
   Button,
   Select,
@@ -15,6 +16,9 @@ import {
   DialogTitle,
   FormGroup,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function TravelLegForm({ trip, handleTravelLegAdd }) {
   const currentUser = useContext(UserContext);
@@ -71,9 +75,12 @@ export default function TravelLegForm({ trip, handleTravelLegAdd }) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Add your Travel
-      </Button>
+      <Tooltip title="Add" onClick={handleClickOpen}>
+        <IconButton>
+          <AddIcon /> Your Travel
+        </IconButton>
+      </Tooltip>
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Travel leg</DialogTitle>
         <DialogContent onSubmit={handleSubmit(onSubmit)}>
