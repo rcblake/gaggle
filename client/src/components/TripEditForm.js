@@ -19,7 +19,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
   const onSubmit = async (data) => {
     try {
       console.log(data);
-      const response = await fetch(`/trips/${trip.id}`, {
+      const response = await fetch(`/api/v1/trips/${trip.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

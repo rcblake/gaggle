@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 import TripForm from "./TripForm";
@@ -15,30 +15,19 @@ export default function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("/check_session").then((res) => {
+    fetch("/api/v1/check_session").then((res) => {
       if (res.ok) {
         res.json().then(setCurrentUser);
       }
     });
   }, []);
 
-  // useEffect(
-  //   () =>
-  //     fetch("users/1").then((res) => {
-  //       if (res.ok) {
-  //         res.json().then(setCurrentUser);
-  //         return;
-  //       }
-  //     }),
-  //   []
-  // );
-
   const updateCurrentUser = (updated_user) => {
     setCurrentUser(updated_user);
   };
 
   const logout = () => {
-    fetch("/logout", {
+    fetch("/api/v1/logout", {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
@@ -91,7 +80,11 @@ export default function App() {
           element={<Signup updateCurrentUser={updateCurrentUser} />}
         />
         <Route path="/trip_form" element={<TripForm />} />
-        <Route path="/" element={currentUser ? <Home /> : null} />
+        <Route path="/home" element={currentUser ? <Home /> : null} />
+        <Route
+          path="/"
+          element={<Navigate to={currentUser ? "/home" : "/login"} />}
+        />
       </Routes>
     </UserContext.Provider>
   );

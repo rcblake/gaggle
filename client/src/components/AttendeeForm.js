@@ -10,7 +10,7 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
   } = useForm();
   const onSubmit = async (data) => {
     try {
-      const getResponse = await fetch("/users");
+      const getResponse = await fetch("/api/v1/users");
       const users = await getResponse.json();
       const user = users.find((u) => u.email === data.email);
       if (user) {
@@ -19,7 +19,7 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
           trip_id: trip.id,
           is_admin: false,
         };
-        const postResponse = await fetch("/trip_users", {
+        const postResponse = await fetch("/api/v1/trip_users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

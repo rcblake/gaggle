@@ -47,7 +47,7 @@ export default function Login({ updateCurrentUser }) {
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      fetch("/api/login", {
+      fetch("/api/v1/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export default function Login({ updateCurrentUser }) {
             res.json().then((data) => {
               console.log(data);
               updateCurrentUser(data);
-              navigate("/");
+              navigate("/home");
             });
           } else {
             res.json().then((err) => setErrors(err.error));

@@ -15,7 +15,7 @@ export default function TripForm() {
   const onSubmit = async (data) => {
     try {
       console.log(data);
-      const response = await fetch("/trips", {
+      const response = await fetch("/api/v1/trips", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

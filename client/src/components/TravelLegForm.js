@@ -27,7 +27,7 @@ export default function TravelLegForm({ trip, handleTravelLegAdd }) {
         flight_number: data.note,
       };
       console.log(newTravelLeg);
-      const postResponse = await fetch("/travel_legs", {
+      const postResponse = await fetch("/api/v1/travel_legs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
