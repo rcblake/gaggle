@@ -31,7 +31,7 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
         body: JSON.stringify(newTask),
       });
       if (postResponse.ok) {
-        handleTaskAdd(newTask);
+        postResponse.json().then(handleTaskAdd());
         console.log("Task added to trip tasks");
         reset();
       } else {
