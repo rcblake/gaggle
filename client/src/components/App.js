@@ -10,6 +10,7 @@ import Login from "./Login";
 import Home from "./Home";
 import Trip from "./Trip";
 import Logout from "./Logout";
+import AppBar from "./AppBar";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
@@ -44,9 +45,8 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <UserContext.Provider value={currentUser}>
-        {/* <AppBar />
-      
-      */}
+        <AppBar />
+
         <Typography variant="h4">
           currentUser: {currentUser?.email || null}
           {currentUser?.name}
