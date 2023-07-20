@@ -84,8 +84,8 @@ class Task(db.Model):
     trip_id = db.Column(db.Integer, db.ForeignKey("trips.id"))
     title = db.Column(db.String, nullable=False)
     note = db.Column(db.String, nullable=False)
-    link = db.Column(db.String)
-    cost = db.Column(db.Float)
+    link = db.Column(db.String, nullable=True)
+    cost = db.Column(db.Float, nullable=True)
     optional = db.Column(db.Boolean, default=False)
     everyone = db.Column(db.Boolean, default=True)
 

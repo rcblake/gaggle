@@ -124,6 +124,8 @@ class TaskSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
+    cost = fields.Float(required=False)
+
     trip = Nested("TripSchema", only=("id",))
 
 
@@ -133,7 +135,7 @@ class EventSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
-    trip = Nested("TripSchema", exclude=("events",))
+    trip = Nested("TripSchema", only=("id",))
 
 
 class TravelLegSchema(SQLAlchemyAutoSchema):
@@ -152,4 +154,4 @@ class LodgingSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
-    trip = Nested("TripSchema", only=("lodging",))
+    trip = Nested("TripSchema", only=("id",))
