@@ -15,4 +15,5 @@ class CheckSessionBP(Resource):
             if user:
                 user_schema = UserSchema()
                 user_data = user_schema.dump(user)
+
                 return make_response(user_data, 200)

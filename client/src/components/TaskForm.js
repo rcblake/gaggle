@@ -1,9 +1,29 @@
-import { useContext } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { UserContext } from "./UserContext";
 
-export default function TaskFrom({ trip, handleTripTaskAdd }) {
-  const currentUser = useContext(UserContext);
+import {
+  Checkbox,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormGroup,
+} from "@mui/material";
+
+export default function TaskFrom({ trip, handleTaskAdd }) {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const {
     register,
     handleSubmit,
@@ -12,26 +32,28 @@ export default function TaskFrom({ trip, handleTripTaskAdd }) {
   } = useForm();
 
   const onSubmit = async (data) => {
+    const costValue = parseFloat(data.cost);
     try {
-      const newTripTask = {
+      const newTask = {
         trip: {
           id: trip.id,
         },
         title: data.title,
         note: data.note,
         link: data.link,
-        cost: data.cost,
+        cost: costValue,
         optional: data.optional,
+        // everyone: data.everyone,
       };
       const postResponse = await fetch("/api/v1/trip_tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newTripTask),
+        body: JSON.stringify(newTask),
       });
       if (postResponse.ok) {
-        handleTripTaskAdd(newTripTask);
+        postResponse.json().then(handleTaskAdd(newTask));
         console.log("Task added to trip tasks");
         reset();
       } else {
@@ -44,34 +66,56 @@ export default function TaskFrom({ trip, handleTripTaskAdd }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Title</label>
-        <input
-          type="text"
-          name="title"
-          {...register("title", {
-            required: "name your task",
-          })}
-        />
-        <label>Note</label>
-        <input
-          type="text"
-          name="note"
-          {...register("note", { required: "What needs to be done?" })}
-        />
-        {errors.note && <p className="errorMsg">{errors.note.message}</p>}
-        <label>Link:</label>
-        <input type="text" name="link" {...register("link", {})} />
-        <label>Cost:</label>
-        <input type="float" name="cost" {...register("cost", {})} />
-        <label>Optional?</label>
-        <input
-          type="checkbox"
-          name="optional"
-          {...register("optional", { defaultChecked: false })}
-        />
-        <input type="submit" />
-      </form>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Add a Task
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>New Task</DialogTitle>
+        <DialogContent component="form">
+          <TextField
+            label="Title"
+            type="text"
+            name="title"
+            {...register("title", {
+              required: "name your task",
+            })}
+          />
+          <TextField
+            label="Note"
+            type="text"
+            name="note"
+            {...register("note", { required: "What needs to be done?" })}
+          />
+          {errors.note && <p className="errorMsg">{errors.note.message}</p>}
+          <TextField
+            label="Link"
+            type="text"
+            name="link"
+            {...register("link", {})}
+          />
+          <TextField
+            label="Cost"
+            type="float"
+            name="cost"
+            {...register("cost", {})}
+          />
+          <FormGroup>
+            <Checkbox
+              label="Optional?"
+              type="checkbox"
+              name="optional"
+              {...register("optional", { defaultChecked: true })}
+            />
+            <Checkbox
+              label="Everyone?"
+              type="checkbox"
+              name="everyone"
+              {...register("optional", { defaultChecked: false })}
+            />
+          </FormGroup>
+          <TextField type="submit" />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

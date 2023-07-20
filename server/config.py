@@ -24,6 +24,7 @@ import os
 
 
 # Local imports
+
 # Instantiate app, set attributes
 
 app = Flask(
@@ -55,9 +56,13 @@ db.init_app(app)
 
 # Instantiate REST API
 api = Api(app, prefix="/api/v1")
+api_map = os.getenv("mapAPI")
+
 
 # Instantiate CORS
 CORS(app)
 
 bcrypt = Bcrypt(app)
 ma = Marshmallow(app)
+
+#

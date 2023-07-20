@@ -8,3 +8,14 @@ export default function Error({ msg }) {
     </Stack>
   );
 }
+
+// **For use at top component**
+// const [errors, setErrors] = useState(null);
+// **For err catch on fetch
+//  res.json().then((err) => setErrors(err.error));
+//
+// .catch((err) => setErrors(err.error));
+// **For use in components, above submit**
+// {
+//   errors ? <Error msg={errors} /> : null;
+// }
