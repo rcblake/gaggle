@@ -60,3 +60,10 @@ server/blueprints/__pycache__/
 #api
 API.js
 
+server/__pycache__/config.cpython-38.pyc
+server/__pycache__/models.cpython-38.pyc
+server/__pycache__/schema.cpython-38.pyc
+server/blueprints/__pycache__/check_session.cpython-38.pyc
+server/blueprints/__pycache__/login.cpython-38.pyc
+server/blueprints/__pycache__/travel_leg.cpython-38.pyc
+server/blueprints/__pycache__/trip.cpython-38.pyc
