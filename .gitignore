@@ -54,8 +54,8 @@ jspm_packages
 
 app.db
 
-server/__pycache__/
-server/blueprints/__pycache__/
+/server/__pycache__/*
+/server/blueprints/__pycache__/*
 
 #api
 API.js
