@@ -61,4 +61,4 @@ app.db
 API.js
 
 
-server/.env
+/server/.env

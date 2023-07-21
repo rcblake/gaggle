@@ -61,7 +61,9 @@ class Trip(db.Model):
     )
     tasks = db.relationship("Task", back_populates="trip", cascade="all, delete-orphan")
 
-    users = db.relationship("TripUser", back_populates="trip")
+    users = db.relationship(
+        "TripUser", back_populates="trip", cascade="all, delete-orphan"
+    )
 
 
 class TripUser(db.Model):
@@ -95,7 +97,6 @@ class Task(db.Model):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     trip = db.relationship("Trip", back_populates="tasks")
-
 
 
 class Event(db.Model):
