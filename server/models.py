@@ -20,7 +20,9 @@ class User(db.Model):
         "TravelLeg", back_populates="user", cascade="all, delete-orphan"
     )
 
-    trips = db.relationship("TripUser", back_populates="user")
+    trips = db.relationship(
+        "TripUser", back_populates="user", cascade="all, delete-orphan"
+    )
 
     @hybrid_property
     def password_hash(self):

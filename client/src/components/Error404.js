@@ -1,7 +1,7 @@
 import React from "react";
 import { Paper, Box, Typography } from "@mui/material";
 
-export default function Logout() {
+export default function Error404() {
   return (
     <Paper sx={{ backgroundColor: "#C7623B", height: "100vh" }}>
       <Box
@@ -10,10 +10,11 @@ export default function Logout() {
           flexDirection: "column",
           alignItems: "center",
           backgroundColor: "#C7623B",
-          paddingTop: 20,
+          paddingTop: 15,
         }}
       >
-        <Typography variant="h3">Logged out successfully</Typography>
+        <Typography variant="h1">404</Typography>
+        <Typography variant="h3">That page can not be found</Typography>
       </Box>
     </Paper>
   );

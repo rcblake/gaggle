@@ -1,24 +1,5 @@
-h1{ 
-    fontFamily: "Oswald",
-        fontWeight: 200,
-        lineHeight: 0.97,
-        fontSize: "6.7rem",
-
-}
-
-body{
-    font-family: 'Nunito Sans',
-            sans-serif;
-        font-family: 'Oswald',
-            sans-serif;
-        font-family: 'Quicksand',
-            sans-serif;
-}
-
-
-button {
-    lineHeight: 1.44,
-        fontSize: "1.5rem",
-        fontWeight: 600,
+body {
+    margin:0,
+    padding:0
 }
 

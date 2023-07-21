@@ -10,9 +10,11 @@ import Login from "./Login";
 import Home from "./Home";
 import Trip from "./Trip";
 import Logout from "./Logout";
+import AppBar from "./AppBar";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
+import Error404 from "./Error404";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -44,30 +46,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <UserContext.Provider value={currentUser}>
-        {/* <AppBar />
-      
-      */}
-        <Typography variant="h4">
-          currentUser: {currentUser?.email || null}
-          {currentUser?.name}
-        </Typography>
-        {currentUser ? (
-          <>
-            <Link to="/">
-              <Button>Home</Button>
-            </Link>
-            <Button onClick={logout}>Log Out</Button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">
-              <Button>Log In</Button>
-            </Link>
-            <Link to="/signup">
-              <Button>Sign Up</Button>
-            </Link>
-          </>
-        )}
+        <AppBar setCurrentUser={setCurrentUser} />
 
         <Routes>
           <Route
@@ -79,6 +58,7 @@ export default function App() {
             element={<Trip updateCurrentUser={updateCurrentUser} />}
           />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/404" element={<Error404 />} />
 
           <Route
             path="/signup"
