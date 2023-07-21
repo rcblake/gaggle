@@ -72,7 +72,7 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
   return (
     <div>
       <Tooltip title="Add" onClick={handleClickOpen}>
-        <IconButton>
+        <IconButton size="small">
           <AddIcon /> New Task
         </IconButton>
       </Tooltip>

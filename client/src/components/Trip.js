@@ -65,7 +65,6 @@ export default function Trip({ updateCurrentUser }) {
 
   const handleTaskAdd = (newTask) =>
     setTrip((prevState) => {
-      debugger;
       const obj = {
         ...(prevState = {
           tasks: [...prevState.tasks, newTask],
@@ -97,7 +96,6 @@ export default function Trip({ updateCurrentUser }) {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
-        Alert("Your trip was successfully deleted");
         updateCurrentUser(currentUser);
         navigate("/");
       } else {
@@ -115,7 +113,7 @@ export default function Trip({ updateCurrentUser }) {
           justifyContent: "space-evenly",
         }}
       >
-        <Box
+        <Stack
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -135,7 +133,7 @@ export default function Trip({ updateCurrentUser }) {
               Delete Trip
             </Button>
           </Box>
-        </Box>
+        </Stack>
         <Box
           sx={{
             flexGrow: 1,

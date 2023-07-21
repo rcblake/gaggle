@@ -77,7 +77,7 @@ export default function TravelLegForm({ trip, handleTravelLegAdd }) {
   return (
     <div>
       <Tooltip title="Add" onClick={handleClickOpen}>
-        <IconButton>
+        <IconButton size="small">
           <AddIcon /> Add Travel
         </IconButton>
       </Tooltip>

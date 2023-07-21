@@ -40,20 +40,22 @@ function ResponsiveAppBar({ setCurrentUser }) {
             variant="h4"
             noWrap
             component="a"
-            href="/small-logo-no-background.png"
+            href="/"
             sx={{
               mr: 2,
-
+              height: "60px",
               fontWeight: 700,
               letterSpacing: ".3rem",
               textDecoration: "none",
               color: "#822907",
+              padding: 1,
+              marginBottom: 1,
             }}
           >
             <img
               src="/small-logo-no-background.png"
               alt="gaggle logo"
-              height="40px"
+              height="60px"
             />
             Gaggle
           </Typography>
