@@ -40,14 +40,15 @@ function ResponsiveAppBar({ setCurrentUser }) {
             variant="h4"
             noWrap
             component="a"
-            href="/"
+            href="/small-logo-no-background.png"
             sx={{
               mr: 2,
+
               display: { xs: "none", md: "flex" },
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
               textDecoration: "none",
+              color: "#822907",
             }}
           >
             Gaggle
