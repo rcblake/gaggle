@@ -14,7 +14,8 @@ export default function Error404() {
         }}
       >
         <Typography variant="h1">404</Typography>
-        <Typography variant="h3">That page can not be found</Typography>
+        <Typography variant="h3">That page can not be provided</Typography>
+        <Typography variant="h3"></Typography>
       </Box>
     </Paper>
   );
