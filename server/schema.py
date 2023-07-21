@@ -40,7 +40,13 @@ class UserSchema(SQLAlchemyAutoSchema):
     trips = Nested(
         "TripUserSchema",
         many=True,
-        only=("trip.id", "trip.name", "trip.start_date", "trip.end_date"),
+        only=(
+            "trip.id",
+            "trip.name",
+            "trip.start_date",
+            "trip.end_date",
+            "trip.location",
+        ),
     )
 
     travel_legs = Nested("TravelLegSchema", many=True)
