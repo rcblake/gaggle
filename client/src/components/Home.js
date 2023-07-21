@@ -2,6 +2,7 @@ import React from "react";
 
 import { useNavigate } from "react-router-dom";
 import MyTrips from "./MyTrips";
+import TripForm from "./TripForm";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Home() {
 
   return (
     <>
-      <button onClick={handleAddClick}>Plan a trip</button>
+      <TripForm />
       <MyTrips />
     </>
   );

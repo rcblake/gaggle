@@ -15,8 +15,8 @@ import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 
 export default function TaskContainer({ trip, handleTaskAdd }) {
-  function createData(title, note, link, cost, optional, everyone) {
-    return { title, note, link, cost, optional, everyone };
+  function createData(title, note, link, cost, optional, everyone, id) {
+    return { title, note, link, cost, optional, everyone, id };
   }
 
   const rows = trip.tasks?.map((task) =>
@@ -26,9 +26,16 @@ export default function TaskContainer({ trip, handleTaskAdd }) {
       task.link,
       task.cost,
       task.optional,
-      task.everyone
+      task.everyone,
+      task.id
     )
   );
+
+  // const handleDelete = (id) => {
+  //   fetch(`/task/${id}`, {
+  //     method: "DELETE",
+  //   });
+  // };
 
   return (
     <TableContainer component={Paper}>
@@ -44,27 +51,29 @@ export default function TaskContainer({ trip, handleTaskAdd }) {
             <TableCell align="center">Description</TableCell>
             <TableCell align="center">Link</TableCell>
             <TableCell align="center">Cost</TableCell>
-            <TableCell align="center">Optional?</TableCell>
-            <TableCell align="center">Everyone?</TableCell>
+            {/* <TableCell align="center">Optional?</TableCell>
+            <TableCell align="center">Everyone?</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {rows?.map((row) => (
             <TableRow
-              key={row.Task}
+              key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell align="center">{row.title}</TableCell>
               <TableCell align="center">{row.note}</TableCell>
               <TableCell align="center">{row.link}</TableCell>
               <TableCell align="center">{row.cost}</TableCell>
-              <TableCell align="center">{row.optional}</TableCell>
-              <TableCell align="center">{row.everyone}</TableCell>
-              <Tooltip title="Delete">
-                <IconButton>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              {/* <TableCell align="center">{row.optional}</TableCell>
+              <TableCell align="center">{row.everyone}</TableCell> */}
+              {/* <TableCell>
+                <Tooltip title="Delete">
+                  <IconButton onClick={handleDelete(row.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

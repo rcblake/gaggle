@@ -59,6 +59,7 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
       if (postResponse.ok) {
         postResponse.json().then(handleTaskAdd(newTask));
         console.log("Task added to trip tasks");
+        handleClose();
         reset();
       } else {
         console.log("Trip task failed");
@@ -77,50 +78,57 @@ export default function TaskFrom({ trip, handleTaskAdd }) {
       </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Task</DialogTitle>
-        <DialogContent component="form">
-          <TextField
-            label="Title"
-            type="text"
-            name="title"
-            {...register("title", {
-              required: "name your task",
-            })}
-          />
-          <TextField
-            label="Note"
-            type="text"
-            name="note"
-            {...register("note", { required: "What needs to be done?" })}
-          />
-          {errors.note && <p className="errorMsg">{errors.note.message}</p>}
-          <TextField
-            label="Link"
-            type="text"
-            name="link"
-            {...register("link", {})}
-          />
-          <TextField
-            label="Cost"
-            type="float"
-            name="cost"
-            {...register("cost", {})}
-          />
-          <FormGroup>
-            <Checkbox
-              label="Optional?"
-              type="checkbox"
-              name="optional"
-              {...register("optional", { defaultChecked: true })}
-            />
-            <Checkbox
-              label="Everyone?"
-              type="checkbox"
-              name="everyone"
-              {...register("optional", { defaultChecked: false })}
-            />
-          </FormGroup>
-          <TextField type="submit" />
-        </DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent>
+            <FormGroup>
+              <TextField
+                label="Title"
+                type="text"
+                name="title"
+                {...register("title", {
+                  required: "name your task",
+                })}
+              />
+              <TextField
+                label="Note"
+                type="text"
+                name="note"
+                {...register("note", { required: "What needs to be done?" })}
+              />
+              {errors.note && <p className="errorMsg">{errors.note.message}</p>}
+              <TextField
+                label="Link"
+                type="text"
+                name="link"
+                {...register("link", {})}
+              />
+              <TextField
+                label="Cost"
+                type="float"
+                name="cost"
+                {...register("cost", {})}
+              />
+              {/* <FormGroup>
+                <Checkbox
+                  label="Optional?"
+                  type="checkbox"
+                  name="optional"
+                  {...register("optional", { defaultChecked: true })}
+                />
+                <Checkbox
+                  label="Everyone?"
+                  type="checkbox"
+                  name="everyone"
+                  {...register("optional", { defaultChecked: false })}
+                />
+              </FormGroup> */}
+            </FormGroup>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Add Task</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Button } from "@mui/material";
 
 export default function AttendeeForm({ trip, handleAttendeeAdd }) {
   const {
@@ -59,7 +60,7 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
           })}
         />
         {errors.email && <p className="errorMsg">{errors.email.message}</p>}
-        <TextField type="submit" />
+        <Button type="submit" />
       </Box>
     </div>
   );

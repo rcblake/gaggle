@@ -1,8 +1,34 @@
-import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
+import {
+  Typography,
+  Checkbox,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormGroup,
+} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import Tooltip from "@mui/material/Tooltip";
+
 export default function TripForm() {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const {
     register,
     handleSubmit,
@@ -35,44 +61,63 @@ export default function TripForm() {
   };
 
   return (
-    <div className="form-dialog">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Trip Name:</label>
-        <input
-          type="text"
-          name="name"
-          {...register("name", {
-            required: "Name is required",
-          })}
-        />
-        {errors.name && <p className="errorMsg">{errors.name.message}</p>}
-        <label>Location:</label>
-        <input type="text" name="location" {...register("location", {})} />
-        <label>Start Date:</label>
-        <input
-          type="date"
-          name="start_date"
-          {...register("start_date", {
-            required: "Start Date is required",
-          })}
-        />
-        {errors.start_date && (
-          <p className="errorMsg">{errors.start_date.message}</p>
-        )}
-        <label>End Date:</label>
-        <input
-          type="date"
-          name="end_date"
-          {...register("end_date", {
-            required: "End Date is required",
-            validate: (value) => value > getValues().start_date,
-          })}
-        />
-        {errors.end_date && (
-          <p className="errorMsg">{errors.end_date.message}</p>
-        )}
-        <input type="submit" />
-      </form>
+    <div>
+      <Tooltip title="newTrip" onClick={handleClickOpen}>
+        <IconButton>
+          <AddIcon /> Plan a Trip
+        </IconButton>
+      </Tooltip>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Your next Trip</DialogTitle>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent>
+            <FormGroup>
+              <label>Trip Name:</label>
+              <TextField
+                type="text"
+                name="name"
+                {...register("name", {
+                  required: "Name is required",
+                })}
+              />
+              {errors.name && <p className="errorMsg">{errors.name.message}</p>}
+              <Typography variant="body1">Location: </Typography>
+              <TextField
+                type="text"
+                name="location"
+                {...register("location", {})}
+              />
+              <label>Start Date:</label>
+              <TextField
+                type="date"
+                name="start_date"
+                {...register("start_date", {
+                  required: "Start Date is required",
+                })}
+              />
+              {errors.start_date && (
+                <p className="errorMsg">{errors.start_date.message}</p>
+              )}
+              <label>End Date:</label>
+              <TextField
+                type="date"
+                name="end_date"
+                {...register("end_date", {
+                  required: "End Date is required",
+                  validate: (value) => value > getValues().start_date,
+                })}
+              />
+              {errors.end_date && (
+                <p className="errorMsg">{errors.end_date.message}</p>
+              )}
+            </FormGroup>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </div>
   );
 }
