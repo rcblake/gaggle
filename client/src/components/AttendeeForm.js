@@ -50,9 +50,10 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
 
   return (
     <div>
-      <Box>
+      <Box display={"flex"} alignItems={"center"}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
+            size="small"
             label="email"
             type="email"
             name="email"
@@ -61,7 +62,7 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
             })}
           />
           {errors.email && <p className="errorMsg">{errors.email.message}</p>}
-          <Button type="submit" />
+          <Button type="submit">Add</Button>
         </form>
       </Box>
     </div>

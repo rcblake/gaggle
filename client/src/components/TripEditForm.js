@@ -84,7 +84,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
   return (
     <div>
       <Tooltip title="editTrip" onClick={handleClickOpen}>
-        <IconButton>
+        <IconButton size="small">
           <EditIcon /> Edit Trip
         </IconButton>
       </Tooltip>

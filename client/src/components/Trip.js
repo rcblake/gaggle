@@ -124,14 +124,16 @@ export default function Trip({ updateCurrentUser }) {
             alignContent: "center",
           }}
         >
-          <Typography variant="h2">{trip.name}</Typography>
-          <Typography variant="h3">{trip.location}</Typography>
+          <Typography variant="h4">{trip.name}</Typography>
+          <Typography variant="h5">{trip.location}</Typography>
           <Typography>
             {trip.start_date} - {trip.end_date}
           </Typography>
           <Box display="flex" flexDirection={"row"}>
             <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
-            <Button onClick={handleDelete}>Delete Trip</Button>
+            <Button size="small" onClick={handleDelete}>
+              Delete Trip
+            </Button>
           </Box>
         </Box>
         <Box

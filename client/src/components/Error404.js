@@ -10,6 +10,7 @@ export default function Error404() {
           flexDirection: "column",
           alignItems: "center",
           backgroundColor: "#C7623B",
+          paddingTop: 15,
         }}
       >
         <Typography variant="h1">404</Typography>
