@@ -23,3 +23,7 @@ $ python seed.py
 7. You’re now ready to start the server and start the client
 8. from /server $ python app.py
 9. from /client $ npm start
+
+
+##Licensing
+MIT License Copyright (c) 2023
