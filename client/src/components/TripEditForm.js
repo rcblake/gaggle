@@ -1,13 +1,53 @@
-import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import {
+  Checkbox,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormGroup,
+} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
+
+export const dirtyValues = (dirtyFields, allValues) => {
+  if (dirtyFields === true || Array.isArray(dirtyFields)) {
+    return allValues;
+  }
+
+  return Object.fromEntries(
+    Object.keys(dirtyFields).map((key) => [
+      key,
+      dirtyValues(dirtyFields[key], allValues[key]),
+    ])
+  );
+};
+
 export default function TripEditForm({ trip, handleTripEdit }) {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const {
     register,
     handleSubmit,
+    formState,
     getValues,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: trip?.name,
       location: trip?.location,
@@ -17,20 +57,22 @@ export default function TripEditForm({ trip, handleTripEdit }) {
   });
 
   const onSubmit = async (data) => {
+    debugger;
     try {
-      console.log(data);
+      console.log(dirtyValues(formState.dirtyFields, data));
+      const tripEdit = dirtyValues(formState.dirtyFields, data);
       const response = await fetch(`/trips/${trip.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(tripEdit),
       });
 
       if (response.ok) {
         const trip = await response.json();
-        console.log(trip);
         handleTripEdit();
+        handleClose();
       } else {
         console.log("Error creating trip");
       }
@@ -40,52 +82,62 @@ export default function TripEditForm({ trip, handleTripEdit }) {
   };
 
   return (
-    <div className="form-dialog">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Trip Name:</label>
-        <input
-          defaultValue={trip.name}
-          type="text"
-          name="name"
-          {...register("name", {
-            required: "Name is required",
-          })}
-        />
-        {errors.name && <p className="errorMsg">{errors.name.message}</p>}
-        <label>Location:</label>
-        <input
-          defaultValue={trip.location}
-          type="text"
-          name="location"
-          {...register("location", {})}
-        />
-        <label>Start Date:</label>
-        <input
-          defaultValue={trip.start_date}
-          type="date"
-          name="start_date"
-          {...register("start_date", {
-            required: "Start Date is required",
-          })}
-        />
-        {errors.start_date && (
-          <p className="errorMsg">{errors.start_date.message}</p>
-        )}
-        <label>End Date:</label>
-        <input
-          defaultValue={trip.end_date}
-          type="date"
-          name="end_date"
-          {...register("end_date", {
-            required: "End Date is required",
-            validate: (value) => value > getValues().start_date,
-          })}
-        />
-        {errors.end_date && (
-          <p className="errorMsg">{errors.end_date.message}</p>
-        )}
-        <input type="submit" />
-      </form>
+    <div>
+      <Tooltip title="editTrip" onClick={handleClickOpen}>
+        <IconButton size="small">
+          <EditIcon /> Edit Trip
+        </IconButton>
+      </Tooltip>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Edit Trip</DialogTitle>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent>
+            <FormGroup>
+              <TextField
+                defaultValue={trip.name}
+                label="Trip Name"
+                type="text"
+                name="name"
+                {...register("name", {})}
+              />
+              {errors.name && <p className="errorMsg">{errors.name.message}</p>}
+              <TextField
+                label="Location"
+                defaultValue={trip.location}
+                type="text"
+                name="location"
+                {...register("location", {})}
+              />
+              <TextField
+                label="Start Date"
+                defaultValue={trip.start_date}
+                type="date"
+                name="start_date"
+                {...register("start_date", {})}
+              />
+              {errors.start_date && (
+                <p className="errorMsg">{errors.start_date.message}</p>
+              )}
+              <TextField
+                label="End Date"
+                defaultValue={trip.end_date}
+                type="date"
+                name="end_date"
+                {...register("end_date", {
+                  validate: (value) => value > getValues().start_date,
+                })}
+              />
+              {errors.end_date && (
+                <p className="errorMsg">{errors.end_date.message}</p>
+              )}
+            </FormGroup>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </div>
   );
 }
