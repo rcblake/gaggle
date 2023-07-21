@@ -1,7 +1,7 @@
 from blueprints import session, Resource, Blueprint, make_response, g, abort
 from models import db
 
-logout_bp = Blueprint("logout", __name__, url_prefix="/logout")
+logout_bp = Blueprint("logout", __name__, url_prefix="/api/v1/logout")
 
 
 class LogoutBP(Resource):

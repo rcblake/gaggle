@@ -4,7 +4,9 @@ from config import db
 from models import User
 from schema import UserSchema
 
-check_session_bp = Blueprint("check_session", __name__, url_prefix="/check_session")
+check_session_bp = Blueprint(
+    "check_session", __name__, url_prefix="/api/v1/check_session"
+)
 
 
 class CheckSessionBP(Resource):

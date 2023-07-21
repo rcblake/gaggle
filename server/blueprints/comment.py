@@ -5,7 +5,7 @@ from schema import CommentSchema
 from config import db
 
 
-comment_bp = Blueprint("comment", __name__, url_prefix="/comments")
+comment_bp = Blueprint("comment", __name__, url_prefix="/api/v1/comments")
 api = Api(comment_bp)
 
 comments_schema = CommentSchema(many=True)

@@ -5,7 +5,7 @@ from schema import TaskSchema
 from config import db, ValidationError
 
 
-task_bp = Blueprint("task", __name__, url_prefix="/tasks")
+task_bp = Blueprint("task", __name__, url_prefix="/api/v1/tasks")
 
 tasks_schema = TaskSchema(many=True)
 task_schema = TaskSchema()

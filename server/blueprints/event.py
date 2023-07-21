@@ -5,7 +5,7 @@ from schema import EventSchema
 from config import db
 
 
-event_bp = Blueprint("event", __name__, url_prefix="/events")
+event_bp = Blueprint("event", __name__, url_prefix="/api/v1/events")
 api = Api(event_bp)
 
 events_schema = EventSchema(many=True)

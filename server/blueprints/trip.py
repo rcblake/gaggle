@@ -4,7 +4,7 @@ from flask_restful import Api, Resource
 from models import Trip
 from schema import TripSchema
 
-trip_bp = Blueprint("trip", __name__, url_prefix="/trips")
+trip_bp = Blueprint("trip", __name__, url_prefix="/api/v1/trips")
 api = Api(trip_bp)
 
 trips_schema = TripSchema(many=True)

@@ -22,7 +22,7 @@ function ResponsiveAppBar({ setCurrentUser }) {
   const navigate = useNavigate();
 
   const logout = () => {
-    fetch("/logout", {
+    fetch("/api/v1/logout", {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {

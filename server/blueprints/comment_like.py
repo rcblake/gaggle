@@ -5,7 +5,9 @@ from schema import CommentLikeSchema
 from config import db
 
 
-comment_like_bp = Blueprint("comment_like", __name__, url_prefix="/comment_likes")
+comment_like_bp = Blueprint(
+    "comment_like", __name__, url_prefix="/api/v1/comment_likes"
+)
 api = Api(comment_like_bp)
 
 comment_likes_schema = CommentLikeSchema(many=True)

@@ -52,7 +52,8 @@ export default function Signup({ updateCurrentUser }) {
     },
     validationSchema: UserSchema,
     onSubmit: (values) => {
-      fetch("/signup", {
+      debugger;
+      fetch("/api/v1/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

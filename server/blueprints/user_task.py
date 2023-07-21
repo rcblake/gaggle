@@ -5,7 +5,7 @@ from schema import UserTaskSchema
 from config import db
 
 
-user_task_bp = Blueprint("user_task", __name__, url_prefix="/user_tasks")
+user_task_bp = Blueprint("user_task", __name__, url_prefix="/api/v1/user_tasks")
 api = Api(user_task_bp)
 
 user_tasks_schema = UserTaskSchema(many=True)

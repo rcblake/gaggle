@@ -68,7 +68,7 @@ export default function TripForm({ handleAttendeeAdd }) {
       trip_id: trip.id,
       is_admin: true,
     };
-    const postResponse = await fetch("/trip_users", {
+    const postResponse = await fetch("/api/v1/trip_users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

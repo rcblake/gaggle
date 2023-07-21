@@ -75,7 +75,7 @@ export default function Trip({ updateCurrentUser }) {
     });
 
   const handleTripEdit = () => {
-    fetch(`/trips/${id}`)
+    fetch(`/api/v1/trips/${id}`)
       .then((res) => {
         if (res.ok) {
           return res.json();

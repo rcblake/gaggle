@@ -4,7 +4,7 @@ from config import db
 from models import User
 from schema import UserSchema
 
-user_bp = Blueprint("user", __name__, url_prefix="/users")
+user_bp = Blueprint("user", __name__, url_prefix="/api/v1/users")
 
 users_schema = UserSchema(many=True)
 user_schema = UserSchema()
