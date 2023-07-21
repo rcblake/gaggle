@@ -55,7 +55,7 @@ function ResponsiveAppBar({ setCurrentUser }) {
             <img
               src="/small-logo-no-background.png"
               alt="gaggle logo"
-              height="60px"
+              height="45px"
             />
             Gaggle
           </Typography>

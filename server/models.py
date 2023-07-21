@@ -61,7 +61,9 @@ class Trip(db.Model):
     )
     tasks = db.relationship("Task", back_populates="trip", cascade="all, delete-orphan")
 
-    users = db.relationship("TripUser", back_populates="trip")
+    users = db.relationship(
+        "TripUser", back_populates="trip", cascade="all, delete-orphan"
+    )
 
 
 class TripUser(db.Model):
