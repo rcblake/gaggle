@@ -5,13 +5,13 @@ import { UserContext } from "./UserContext";
 export default function MyTrips() {
   const currentUser = useContext(UserContext);
   const trips = currentUser?.trips;
-
+  debugger;
   return (
     <>
       <h4>Your Trips:</h4>
-      {trips?.map((trip) => (
-        <TripCard key={trip.trip.id} trip={trip.trip} />
-      ))}
+      {trips
+        ? trips?.map((trip) => <TripCard key={trip.trip.id} trip={trip.trip} />)
+        : null}
     </>
   );
 }

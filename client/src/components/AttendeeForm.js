@@ -50,17 +50,19 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
 
   return (
     <div>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          label="email"
-          type="email"
-          name="email"
-          {...register("email", {
-            required: "email is required",
-          })}
-        />
-        {errors.email && <p className="errorMsg">{errors.email.message}</p>}
-        <Button type="submit" />
+      <Box>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            label="email"
+            type="email"
+            name="email"
+            {...register("email", {
+              required: "email is required",
+            })}
+          />
+          {errors.email && <p className="errorMsg">{errors.email.message}</p>}
+          <Button type="submit" />
+        </form>
       </Box>
     </div>
   );

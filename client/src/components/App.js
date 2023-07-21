@@ -31,43 +31,10 @@ export default function App() {
     setCurrentUser(updated_user);
   };
 
-  const logout = () => {
-    fetch("/logout", {
-      method: "DELETE",
-    }).then((res) => {
-      if (res.ok) {
-        setCurrentUser(null);
-        navigate("/logout");
-      }
-    });
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <UserContext.Provider value={currentUser}>
-        <AppBar />
-
-        <Typography variant="h4">
-          currentUser: {currentUser?.email || null}
-          {currentUser?.name}
-        </Typography>
-        {currentUser ? (
-          <>
-            <Link to="/">
-              <Button>Home</Button>
-            </Link>
-            <Button onClick={logout}>Log Out</Button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">
-              <Button>Log In</Button>
-            </Link>
-            <Link to="/signup">
-              <Button>Sign Up</Button>
-            </Link>
-          </>
-        )}
+        <AppBar setCurrentUser={setCurrentUser} />
 
         <Routes>
           <Route

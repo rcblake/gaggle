@@ -6,6 +6,10 @@ import AttendeeContainer from "./AttendeeContainer";
 import Itineraries from "./Itineraries";
 import TaskContainer from "./TaskContainer";
 
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import { Box } from "@mui/material";
+
 export default function Trip({ updateCurrentUser }) {
   const [trip, setTrip] = useState({});
   const navigate = useNavigate();
@@ -18,18 +22,18 @@ export default function Trip({ updateCurrentUser }) {
         if (res.ok) {
           return res.json();
         } else {
-          throw new Error("Network response was not ok.");
+          navigate("/404");
         }
       })
       .then((trip) => {
-        // if (trip.users?.includes(currentUser)) {
-        setTrip(trip);
-        // } else {
-        //   navigate("/404");
-        // }
+        if (trip.users.find((user) => user.email !== currentUser.email)) {
+          setTrip(trip);
+        } else {
+          navigate("/404");
+        }
       })
       .catch((err) => {
-        console.error(err);
+        navigate("/404");
       });
   }, [id]);
 
@@ -81,11 +85,7 @@ export default function Trip({ updateCurrentUser }) {
         }
       })
       .then((trip) => {
-        // if (trip.users?.includes(currentUser)) {
         setTrip(trip);
-        // } else {
-        //   navigate("/404");
-        // }
       })
       .catch((err) => {
         console.error(err);
@@ -97,7 +97,7 @@ export default function Trip({ updateCurrentUser }) {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
-        alert("Your trip was successfully deleted");
+        Alert("Your trip was successfully deleted");
         updateCurrentUser(currentUser);
         navigate("/");
       } else {
@@ -107,12 +107,13 @@ export default function Trip({ updateCurrentUser }) {
   };
   return (
     <>
-      {/* <TripHeader /> */}
-      <h2>Trip:{trip.name}</h2>
-      Edit:
-      <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
-      <button onClick={handleDelete}>Delete Trip</button>
-      <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
+      <Box sx={{ display: "flex", flexDirection: "row", height: 200 }}>
+        <Box>
+          <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
+          <button onClick={handleDelete}>Delete Trip</button>
+        </Box>
+        <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
+      </Box>
       <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
       <TaskContainer trip={trip} handleTaskAdd={handleTaskAdd} />
     </>

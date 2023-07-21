@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -17,9 +17,11 @@ import {
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
+import { UserContext } from "./UserContext";
 
-export default function TripForm() {
+export default function TripForm({ handleAttendeeAdd }) {
   const [open, setOpen] = useState(false);
+  const currentUser = useContext(UserContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,12 +53,32 @@ export default function TripForm() {
 
       if (response.ok) {
         const trip = await response.json();
-        navigate(`/trips/${trip.id}`);
+        newTripUser(trip);
       } else {
         console.log("Error creating trip");
       }
     } catch (error) {
       console.log("Error creating trip", error);
+    }
+  };
+
+  const newTripUser = async (trip) => {
+    const newTripUser = {
+      user_id: currentUser.id,
+      trip_id: trip.id,
+      is_admin: true,
+    };
+    const postResponse = await fetch("/trip_users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTripUser),
+    });
+    if (postResponse.ok) {
+      navigate(`/trips/${trip.id}`);
+    } else {
+      alert("User already on Trip");
     }
   };
 
