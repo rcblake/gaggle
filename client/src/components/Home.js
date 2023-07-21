@@ -6,7 +6,6 @@ import TripForm from "./TripForm";
 export default function Home() {
   return (
     <>
-      <TripForm />
       <MyTrips />
     </>
   );

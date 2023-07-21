@@ -11,6 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { red } from "@mui/material/colors";
 
 export default function Itineraries({ trip, handleTravelLegAdd }) {
   function createData(userName, direction, departure, arrival, note, id) {
@@ -44,7 +45,12 @@ export default function Itineraries({ trip, handleTravelLegAdd }) {
   );
   return (
     <TableContainer component={Paper}>
-      <Box display="flex" flexDirection="row" alignItems={"center"}>
+      <Box
+        marginLeft={3}
+        display="flex"
+        flexDirection="row"
+        alignItems={"center"}
+      >
         <Typography variant="h4">travel</Typography>
         <TravelLegForm trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
       </Box>

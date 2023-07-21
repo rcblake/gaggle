@@ -39,9 +39,14 @@ export default function TaskContainer({ trip, handleTaskAdd }) {
 
   return (
     <TableContainer component={Paper}>
-      <Box display="flex" flexDirection="row" alignItems={"center"}>
+      <Box
+        marginLeft={3}
+        display="flex"
+        flexDirection="row"
+        alignItems={"center"}
+      >
         <Typography variant="h4">tasks</Typography>
-        <TaskForm trip={trip} handleTaskAdd={handleTaskAdd} />
+        <TaskForm display="flex" trip={trip} handleTaskAdd={handleTaskAdd} />
       </Box>
 
       <Table aria-label="tasks table">

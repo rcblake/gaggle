@@ -8,7 +8,9 @@ export default function MyTrips() {
   const trips = currentUser?.trips;
   return (
     <>
-      <Typography variant="h5">Your Trips:</Typography>
+      <Typography marginLeft={5} variant="h5">
+        Your Trips:
+      </Typography>
       {trips
         ? trips?.map((trip) => <TripCard key={trip.trip.id} trip={trip.trip} />)
         : null}

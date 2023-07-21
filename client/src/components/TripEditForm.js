@@ -89,7 +89,7 @@ export default function TripEditForm({ trip, handleTripEdit }) {
         </IconButton>
       </Tooltip>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Task</DialogTitle>
+        <DialogTitle>Edit Trip</DialogTitle>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogContent>
             <FormGroup>

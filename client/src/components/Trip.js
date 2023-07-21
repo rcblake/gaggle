@@ -8,7 +8,7 @@ import TaskContainer from "./TaskContainer";
 
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 export default function Trip({ updateCurrentUser }) {
   const [trip, setTrip] = useState({});
@@ -107,12 +107,43 @@ export default function Trip({ updateCurrentUser }) {
   };
   return (
     <>
-      <Box sx={{ display: "flex", flexDirection: "row", height: 200 }}>
-        <Box>
-          <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
-          <button onClick={handleDelete}>Delete Trip</button>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          height: 200,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h2">{trip.name}</Typography>
+          <Typography variant="h3">{trip.location}</Typography>
+          <Typography>
+            {trip.start_date} - {trip.end_date}
+          </Typography>
+          <Box display="flex" flexDirection={"row"}>
+            <TripEditForm trip={trip} handleTripEdit={handleTripEdit} />
+            <Button onClick={handleDelete}>Delete Trip</Button>
+          </Box>
         </Box>
-        <AttendeeContainer trip={trip} handleAttendeeAdd={handleAttendeeAdd} />
+        <Box
+          sx={{
+            flexGrow: 1,
+            justifyContent: "flex-end",
+            display: "flex",
+          }}
+        >
+          <AttendeeContainer
+            trip={trip}
+            handleAttendeeAdd={handleAttendeeAdd}
+          />
+        </Box>
       </Box>
       <Itineraries trip={trip} handleTravelLegAdd={handleTravelLegAdd} />
       <TaskContainer trip={trip} handleTaskAdd={handleTaskAdd} />

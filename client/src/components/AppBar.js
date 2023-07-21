@@ -44,23 +44,26 @@ function ResponsiveAppBar({ setCurrentUser }) {
             sx={{
               mr: 2,
 
-              display: { xs: "none", md: "flex" },
               fontWeight: 700,
               letterSpacing: ".3rem",
               textDecoration: "none",
               color: "#822907",
             }}
           >
+            <img
+              src="/small-logo-no-background.png"
+              alt="gaggle logo"
+              height="40px"
+            />
             Gaggle
           </Typography>
 
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Box
             color="secondary"
             sx={{
               flexGrow: 1,
               justifyContent: "flex-end",
-              display: { xs: "none", md: "flex" },
+              display: "flex",
             }}
           >
             {currentUser ? (
@@ -68,6 +71,7 @@ function ResponsiveAppBar({ setCurrentUser }) {
                 <Link to="/">
                   <Button color="secondary">Home</Button>
                 </Link>
+
                 <Button onClick={logout} color="secondary">
                   Log Out
                 </Button>
