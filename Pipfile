@@ -19,6 +19,7 @@ ipdb = "*"
 python-dotenv = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
+sendgrid = "*"
 
 [dev-packages]
 

@@ -65,7 +65,10 @@ export default function App() {
             element={<Signup updateCurrentUser={updateCurrentUser} />}
           />
           <Route path="/trip_form" element={<TripForm />} />
-          <Route path="/home" element={currentUser ? <Home /> : null} />
+          <Route
+            path="/home"
+            element={currentUser ? <Home /> : <Navigate to="/login" />}
+          />
           <Route
             path="/"
             element={<Navigate to={currentUser ? "/home" : "/login"} />}

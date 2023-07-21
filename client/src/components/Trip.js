@@ -92,7 +92,7 @@ export default function Trip({ updateCurrentUser }) {
   };
 
   const handleDelete = () => {
-    fetch(`/trips/${id}`, {
+    fetch(`/api/v1/trips/${id}`, {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
