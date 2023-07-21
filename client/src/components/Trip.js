@@ -112,14 +112,16 @@ export default function Trip({ updateCurrentUser }) {
           display: "flex",
           flexDirection: "row",
           height: 200,
+          justifyContent: "space-evenly",
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "space-evenly",
             alignItems: "center",
+            alignContent: "center",
           }}
         >
           <Typography variant="h2">{trip.name}</Typography>
@@ -135,8 +137,8 @@ export default function Trip({ updateCurrentUser }) {
         <Box
           sx={{
             flexGrow: 1,
-            justifyContent: "flex-end",
             display: "flex",
+            justifyContent: "space-evenly",
           }}
         >
           <AttendeeContainer
