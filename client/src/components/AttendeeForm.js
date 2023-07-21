@@ -1,5 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import { Button } from "@mui/material";
 
 export default function AttendeeForm({ trip, handleAttendeeAdd }) {
   const {
@@ -47,18 +50,21 @@ export default function AttendeeForm({ trip, handleAttendeeAdd }) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>email:</label>
-        <input
-          type="email"
-          name="email"
-          {...register("email", {
-            required: "email is required",
-          })}
-        />
-        {errors.email && <p className="errorMsg">{errors.email.message}</p>}
-        <input type="submit" />
-      </form>
+      <Box display={"flex"} alignItems={"center"}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            size="small"
+            label="email"
+            type="email"
+            name="email"
+            {...register("email", {
+              required: "email is required",
+            })}
+          />
+          {errors.email && <p className="errorMsg">{errors.email.message}</p>}
+          <Button type="submit">Add</Button>
+        </form>
+      </Box>
     </div>
   );
 }

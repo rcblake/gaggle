@@ -5,7 +5,7 @@ from schema import PostSchema
 from config import db
 
 
-post_bp = Blueprint("post", __name__, url_prefix="/posts")
+post_bp = Blueprint("post", __name__, url_prefix="/api/v1/posts")
 api = Api(post_bp)
 
 posts_schema = PostSchema(many=True)

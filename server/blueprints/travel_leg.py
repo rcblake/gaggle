@@ -5,7 +5,7 @@ from schema import TravelLegSchema
 from config import db
 
 
-travel_leg_bp = Blueprint("travel_leg", __name__, url_prefix="/travel_legs")
+travel_leg_bp = Blueprint("travel_leg", __name__, url_prefix="/api/v1/travel_legs")
 
 travel_legs_schema = TravelLegSchema(many=True)
 travel_leg_schema = TravelLegSchema()
@@ -27,9 +27,6 @@ class TravelLegBP(Resource):
     def post(self):
         travel_leg_data = request.get_json()
         travel_leg = travel_leg_schema.load(travel_leg_data, session=db.session)
-        import ipdb
-
-        ipdb.set_trace()
         db.session.add(travel_leg)
         db.session.commit()
         return make_response(travel_leg_schema.dump(travel_leg), 201)

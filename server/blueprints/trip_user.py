@@ -6,7 +6,7 @@ from schema import TripUserSchema
 from sqlalchemy import and_
 
 
-trip_user_bp = Blueprint("trip_user", __name__, url_prefix="/trip_users")
+trip_user_bp = Blueprint("trip_user", __name__, url_prefix="/api/v1/trip_users")
 
 trip_users_schema = TripUserSchema(many=True)
 trip_user_schema = TripUserSchema()

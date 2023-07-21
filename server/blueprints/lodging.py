@@ -4,7 +4,7 @@ from models import Lodging
 from schema import LodgingSchema
 from config import db
 
-lodging_bp = Blueprint("lodging", __name__, url_prefix="/lodgings")
+lodging_bp = Blueprint("lodging", __name__, url_prefix="/api/v1/lodgings")
 api = Api(lodging_bp)
 
 lodgings_schema = LodgingSchema(many=True)

@@ -18,12 +18,13 @@ from marshmallow import (
 )
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemySchema, SQLAlchemyAutoSchema
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from os import environ
 import os
 
 
 # Local imports
+
 # Instantiate app, set attributes
 
 app = Flask(
@@ -34,9 +35,9 @@ app = Flask(
 )
 
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
 app.debug = True
@@ -55,9 +56,13 @@ db.init_app(app)
 
 # Instantiate REST API
 api = Api(app, prefix="/api/v1")
+api_map = os.getenv("mapAPI")
+
 
 # Instantiate CORS
 CORS(app)
 
 bcrypt = Bcrypt(app)
 ma = Marshmallow(app)
+
+#

@@ -4,7 +4,9 @@ from config import db
 from models import User
 from schema import UserSchema
 
-check_session_bp = Blueprint("check_session", __name__, url_prefix="/check_session")
+check_session_bp = Blueprint(
+    "check_session", __name__, url_prefix="/api/v1/check_session"
+)
 
 
 class CheckSessionBP(Resource):
@@ -15,4 +17,5 @@ class CheckSessionBP(Resource):
             if user:
                 user_schema = UserSchema()
                 user_data = user_schema.dump(user)
+
                 return make_response(user_data, 200)

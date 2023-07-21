@@ -5,12 +5,15 @@ from models import User
 from schema import UserSchema
 
 
-signup_bp = Blueprint("signup", __name__, url_prefix="/signup")
+signup_bp = Blueprint("signup", __name__, url_prefix="/api/v1/signup")
 user_schema = UserSchema()
 
 
 class SignupBP(Resource):
     def post(self):
+        import ipdb
+
+        ipdb.set_trace()
         try:
             data = request.get_json()
 
