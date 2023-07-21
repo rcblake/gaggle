@@ -62,3 +62,4 @@ API.js
 
 
 /server/.env
+*.pyc
