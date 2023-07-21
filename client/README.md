@@ -1,7 +1,7 @@
 ![logo-no-background](https://github.com/rcblake/gaggle/assets/127946751/e3306073-2bca-43c8-bf2c-4382126c1bb9)
 
 
-###Welcome to Gaggle!
+### Welcome to Gaggle!
 
 On Gaggle you and your friends can plan and organize your next trip. No longer do you have to have one friend maticululously managing a google sheet that nobody really references. Now you can see everyone who will be on the trip with you, their travel itinerary, and share a group task list to make sure that you're prepared to take off.
 
