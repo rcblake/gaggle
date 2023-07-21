@@ -14,6 +14,7 @@ import AppBar from "./AppBar";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
+import Error404 from "./Error404";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -46,6 +47,7 @@ export default function App() {
             element={<Trip updateCurrentUser={updateCurrentUser} />}
           />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/404" element={<Error404 />} />
 
           <Route
             path="/signup"
