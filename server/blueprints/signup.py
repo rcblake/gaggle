@@ -11,9 +11,6 @@ user_schema = UserSchema()
 
 class SignupBP(Resource):
     def post(self):
-        import ipdb
-
-        ipdb.set_trace()
         try:
             data = request.get_json()
 
