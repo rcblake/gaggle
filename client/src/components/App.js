@@ -13,12 +13,10 @@ import Logout from "./Logout";
 import AppBar from "./AppBar";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@mui/material";
 import Error404 from "./Error404";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("/api/v1/check_session").then((res) => {
@@ -30,17 +28,6 @@ export default function App() {
 
   const updateCurrentUser = (updated_user) => {
     setCurrentUser(updated_user);
-  };
-
-  const logout = () => {
-    fetch("/api/v1/logout", {
-      method: "DELETE",
-    }).then((res) => {
-      if (res.ok) {
-        setCurrentUser(null);
-        navigate("/logout");
-      }
-    });
   };
 
   return (
