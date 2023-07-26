@@ -7,15 +7,14 @@ import { Typography, Box, Button } from "@mui/material";
 
 function TripCard({ trip }) {
   const navigate = useNavigate();
-
+  debugger;
   const id = trip.id;
 
   const handleTripClick = () => {
     navigate(`/trips/${id}`);
   };
-
   return (
-    <Card sx={{ width: 200 }}>
+    <Card sx={{ width: 200 }} onClick={handleTripClick}>
       <CardContent>
         <Typography variant="h5" component="div">
           {trip.name}
@@ -28,9 +27,7 @@ function TripCard({ trip }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={handleTripClick}>
-          View Trip
-        </Button>
+        <Button size="small">View Trip</Button>
       </CardActions>
     </Card>
   );
