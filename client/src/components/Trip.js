@@ -97,7 +97,7 @@ export default function Trip({ updateCurrentUser }) {
     }).then((res) => {
       if (res.ok) {
         updateCurrentUser(currentUser);
-        navigate("/");
+        navigate("/home");
       } else {
         console.log("trip not deleted");
       }
