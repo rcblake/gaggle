@@ -7,7 +7,6 @@ import { Typography, Box, Button } from "@mui/material";
 
 function TripCard({ trip }) {
   const navigate = useNavigate();
-  debugger;
   const id = trip.id;
 
   const handleTripClick = () => {
